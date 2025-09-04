@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(/C:\\Users\\rss\\Documents\\Eclipse Scripting API\\PlanCrossCheck/**)",
+      "Read(/C:\\Users\\rss\\Documents\\Eclipse Scripting API\\PlanCrossCheck/**)",
+      "Read(/C:\\Users\\rss\\Documents\\Eclipse Scripting API\\PlanCrossCheck\\Final Script/**)",
+      "Read(/C:\\Users\\rss\\Documents\\Eclipse Scripting API\\PlanCrossCheck/**)",
+      "Read(/C:\\Users\\rss\\Documents\\Eclipse Scripting API\\PlanCrossCheck/**)",
+      "Read(/C:\\Users\\rss\\Documents\\Eclipse Scripting API\\PlanCrossCheck/**)",
+      "Read(/C:\\Users\\rss\\Documents\\Eclipse Scripting API\\PlanCrossCheck/**)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

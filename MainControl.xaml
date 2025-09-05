@@ -7,11 +7,12 @@
              mc:Ignorable="d">
 	<UserControl.Resources>
 		<local:SeverityToColorConverter x:Key="SeverityToColorConverter"/>
-		<CollectionViewSource x:Key="GroupedResults" Source="{Binding ValidationResults}">
-			<CollectionViewSource.GroupDescriptions>
-				<PropertyGroupDescription PropertyName="Category"/>
-			</CollectionViewSource.GroupDescriptions>
-		</CollectionViewSource>
+                <CollectionViewSource x:Key="GroupedResults" Source="{Binding ValidationResults}">
+                        <CollectionViewSource.GroupDescriptions>
+                                <PropertyGroupDescription PropertyName="Category"/>
+                                <PropertyGroupDescription PropertyName="SubCategory"/>
+                        </CollectionViewSource.GroupDescriptions>
+                </CollectionViewSource>
 	</UserControl.Resources>
 	<Grid Margin="10">
 		<Grid.RowDefinitions>
@@ -26,17 +27,26 @@
 
 		<ScrollViewer Grid.Row="1">
 			<ItemsControl ItemsSource="{Binding Source={StaticResource GroupedResults}}">
-				<ItemsControl.GroupStyle>
-					<GroupStyle>
-						<GroupStyle.HeaderTemplate>
-							<DataTemplate>
-								<TextBlock Text="{Binding Name}"
+                                <ItemsControl.GroupStyle>
+                                        <GroupStyle>
+                                                <GroupStyle.HeaderTemplate>
+                                                        <DataTemplate>
+                                                                <TextBlock Text="{Binding Name}"
                                          FontWeight="Bold"
                                          Margin="0,10,0,5"/>
-							</DataTemplate>
-						</GroupStyle.HeaderTemplate>
-					</GroupStyle>
-				</ItemsControl.GroupStyle>
+                                                        </DataTemplate>
+                                                </GroupStyle.HeaderTemplate>
+                                        </GroupStyle>
+                                        <GroupStyle>
+                                                <GroupStyle.HeaderTemplate>
+                                                        <DataTemplate>
+                                                                <TextBlock Text="{Binding Name}"
+                                         FontStyle="Italic"
+                                         Margin="10,5,0,5"/>
+                                                        </DataTemplate>
+                                                </GroupStyle.HeaderTemplate>
+                                        </GroupStyle>
+                                </ItemsControl.GroupStyle>
 
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>

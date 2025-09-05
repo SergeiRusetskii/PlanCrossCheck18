@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using VMS.TPS.Common.Model.API;
@@ -15,30 +16,48 @@ namespace PlanCrossCheck
             var rootValidator = new RootValidator();
             var results = rootValidator.Validate(context);
 
-            // Post-process results: if a validator produced a result per field and
-            // every field passed (Info severity), collapse these into a single
-            // summary result so the UI only shows the total result.
+            // Post-process results so that within each category, general and field
+            // messages are separated. If all field messages are informational, collapse
+            // them into a single summary while leaving general messages untouched.
             var processedResults = results
                 .GroupBy(r => r.Category)
                 .SelectMany(group =>
                 {
-                    bool allPass = group.All(r => r.Severity == ValidationSeverity.Info);
-                    bool allFieldMessages = group.All(r => r.Message.StartsWith("Field '"));
+                    var fieldResults = group.Where(r => r.Message.StartsWith("Field '")).ToList();
+                    var generalResults = group.Where(r => !r.Message.StartsWith("Field '")).ToList();
 
-                    if (allPass && allFieldMessages)
+                    var output = new List<ValidationResult>();
+
+                    foreach (var r in generalResults)
                     {
-                        return new[]
-                        {
-                            new ValidationResult
-                            {
-                                Category = group.Key,
-                                Severity = ValidationSeverity.Info,
-                                Message = $"All treatment fields passed {group.Key} checks"
-                            }
-                        };
+                        r.SubCategory = "General";
+                        output.Add(r);
                     }
 
-                    return group;
+                    if (fieldResults.Any())
+                    {
+                        bool allPass = fieldResults.All(r => r.Severity == ValidationSeverity.Info);
+                        if (allPass)
+                        {
+                            output.Add(new ValidationResult
+                            {
+                                Category = group.Key,
+                                SubCategory = "Fields",
+                                Severity = ValidationSeverity.Info,
+                                Message = $"All treatment fields passed {group.Key} checks"
+                            });
+                        }
+                        else
+                        {
+                            foreach (var r in fieldResults)
+                            {
+                                r.SubCategory = "Fields";
+                                output.Add(r);
+                            }
+                        }
+                    }
+
+                    return output;
                 });
 
             foreach (var result in processedResults)
@@ -58,6 +77,7 @@ namespace PlanCrossCheck
     {
         public string Message { get; set; }
         public string Category { get; set; }
+        public string SubCategory { get; set; }
         public ValidationSeverity Severity { get; set; }
 
         // Optional computed property for backward compatibility

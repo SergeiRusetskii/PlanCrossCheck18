@@ -34,13 +34,14 @@ namespace PlanCrossCheck
     {
         public abstract IEnumerable<ValidationResult> Validate(ScriptContext context);
 
-        protected ValidationResult CreateResult(string category, string message, ValidationSeverity severity)
+        protected ValidationResult CreateResult(string category, string message, ValidationSeverity severity, bool isFieldResult = false)
         {
             return new ValidationResult
             {
                 Category = category,
                 Message = message,
-                Severity = severity
+                Severity = severity,
+                IsFieldResult = isFieldResult
             };
         }
     }
@@ -271,7 +272,8 @@ namespace PlanCrossCheck
                                 $"for ≥5Gy/fraction ({context.PlanSetup.DosePerFraction})"
                                 : $"Field '{beam.Id}' should use SRS technique " +
                                 $"for ≥5Gy/fraction ({context.PlanSetup.DosePerFraction})",
-                            hasSRSTechnique ? ValidationSeverity.Info : ValidationSeverity.Error
+                            hasSRSTechnique ? ValidationSeverity.Info : ValidationSeverity.Error,
+                            true
                         ));
                     }
                 }
@@ -299,7 +301,8 @@ namespace PlanCrossCheck
                                 ? $"Field '{beam.Id}' correctly uses FFF energy ({energy}) for dose/fraction ≥5Gy"
                                 : $"Field '{beam.Id}' should use 6FFF or 10FFF energy for dose/fraction ≥5Gy, " +
                                 $"found: {energy}",
-                            isValidEnergy ? ValidationSeverity.Info : ValidationSeverity.Error
+                            isValidEnergy ? ValidationSeverity.Info : ValidationSeverity.Error,
+                            true
                         ));
 
                         if (energy == "6X-FFF") expectedDoseRate = 1400;
@@ -322,7 +325,8 @@ namespace PlanCrossCheck
                                 ? $"Field '{beam.Id}' has correct dose rate ({doseRate} MU/min) for {energy}"
                                 : $"Field '{beam.Id}' has incorrect dose rate ({doseRate} MU/min) " +
                                 $"for {energy} (should be {expectedDoseRate} MU/min)",
-                            isValidDoseRate ? ValidationSeverity.Info : ValidationSeverity.Error
+                            isValidDoseRate ? ValidationSeverity.Info : ValidationSeverity.Error,
+                            true
                         ));
                     }
                 }
@@ -364,7 +368,8 @@ namespace PlanCrossCheck
                             "Fields.Names",
                             isValid ? $"Field '{beam.Id}' follows naming convention"
                                    : $"Field '{beam.Id}' does not follow naming convention",
-                            isValid ? ValidationSeverity.Info : ValidationSeverity.Warning
+                            isValid ? ValidationSeverity.Info : ValidationSeverity.Warning,
+                            true
                         ));
                     }
                 }
@@ -518,7 +523,8 @@ namespace PlanCrossCheck
                                 "Fields.Geometry.MLCOverlap",
                                 $"Fields '{beam1.Id}' and '{beam2.Id}' with collimator {collimatorAngle:F1}° have {overlap / 10:F1} cm jaw overlap " +
                                 $"(X1/X2: {x1_beam1 / 10:F1}/{x2_beam1 / 10:F1} cm and {x1_beam2 / 10:F1}/{x2_beam2 / 10:F1} cm)",
-                                ValidationSeverity.Info
+                                ValidationSeverity.Info,
+                                true
                             ));
                         }
                         else
@@ -526,7 +532,8 @@ namespace PlanCrossCheck
                             results.Add(CreateResult(
                                 "Fields.Geometry.MLCOverlap",
                                 $"Fields '{beam1.Id}' and '{beam2.Id}' with collimator {collimatorAngle:F1}° have no jaw overlap",
-                                ValidationSeverity.Warning
+                                ValidationSeverity.Warning,
+                                true
                             ));
                         }
                     }
@@ -578,7 +585,8 @@ namespace PlanCrossCheck
                             severity == ValidationSeverity.Info ? $"Collimator angle {angle:F1}° is valid" :
                             severity == ValidationSeverity.Warning ? $"Collimator angle {angle:F1}° is duplicated" :
                             $"Invalid collimator angle {angle:F1}°",
-                            severity
+                            severity,
+                            true
                         ));
                     }
 
@@ -602,7 +610,8 @@ namespace PlanCrossCheck
                             $"is within Halcyon limits (-30 to +17 cm)"
                                    : $"Field '{beam.Id}' isocenter Y position ({iecY:F1} cm) " +
                                    $"is outside Halcyon limits (-30 to +17 cm)",
-                            isValid ? ValidationSeverity.Info : ValidationSeverity.Error
+                            isValid ? ValidationSeverity.Info : ValidationSeverity.Error,
+                            true
                         ));
                     }
 
@@ -618,7 +627,8 @@ namespace PlanCrossCheck
                             isValid ? $"Field '{beam.Id}' has correct tolerance table ({toleranceTable})"
                                    : $"Field '{beam.Id}' has incorrect tolerance table. " +
                                    $"Expected: {expectedTable}, Found: {toleranceTable}",
-                            isValid ? ValidationSeverity.Info : ValidationSeverity.Warning
+                            isValid ? ValidationSeverity.Info : ValidationSeverity.Warning,
+                            true
                         ));
                     }
                 }
@@ -640,7 +650,8 @@ namespace PlanCrossCheck
                             firstFieldStartOK ? $"First field '{firstBeam.Id}' correctly starts " +
                                 $"at {firstGantryAngle:F1}° - closest to the 180°"
                                 : $"First field '{firstBeam.Id}' starts at {firstGantryAngle:F1}° (should be close to 180°)",
-                            firstFieldStartOK ? ValidationSeverity.Info : ValidationSeverity.Warning
+                            firstFieldStartOK ? ValidationSeverity.Info : ValidationSeverity.Warning,
+                            true
                         ));
                     }
                 }
@@ -715,7 +726,8 @@ namespace PlanCrossCheck
                             "Fields.SetupFields",
                             isValid ? $"Setup field '{beam.Id}' configuration is valid for Halcyon"
                                    : $"Invalid setup field for Halcyon: should be 'kVCBCT'",
-                            isValid ? ValidationSeverity.Info : ValidationSeverity.Error
+                            isValid ? ValidationSeverity.Info : ValidationSeverity.Error,
+                            true
                         ));
                     }
                     else
@@ -729,7 +741,8 @@ namespace PlanCrossCheck
                             "Fields.SetupFields",
                             isValid ? $"Setup field '{beam.Id}' configuration is valid"
                                    : $"Invalid setup field configuration: {beam.Id} with energy {energy}",
-                            isValid ? ValidationSeverity.Info : ValidationSeverity.Error
+                            isValid ? ValidationSeverity.Info : ValidationSeverity.Error,
+                            true
                         ));
                     }
                 }

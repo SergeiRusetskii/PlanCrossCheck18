@@ -11,7 +11,21 @@
       "Bash(git init:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git config:*)"
+      "Bash(git config:*)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
+      "Bash(git branch:*)",
+      "Bash(git pull:*)",
+      "Read(/C:\\Users\\rss\\Documents\\Eclipse Scripting API\\PlanCrossCheck\\Final Script/**)",
+      "Read(/C:\\Users\\rss\\Documents\\Eclipse Scripting API\\PlanCrossCheck/**)",
+      "Read(/C:\\Users\\rss\\Documents\\Eclipse Scripting API\\PlanCrossCheck/**)",
+      "Read(/C:\\Users\\rss\\Documents\\Eclipse Scripting API\\PlanCrossCheck/**)",
+      "Read(/C:\\Users\\rss\\Documents\\Eclipse Scripting API\\PlanCrossCheck\\Final Script\\Script V1.0/**)",
+      "Read(/C:\\Users\\rss\\Documents\\Eclipse Scripting API\\PlanCrossCheck\\Final Script\\Script V1.2/**)",
+      "Read(/C:\\Users\\rss\\Documents\\Eclipse Scripting API\\PlanCrossCheck\\Final Script\\Script V1.3/**)",
+      "Read(/C:\\Users\\rss\\Documents\\Eclipse Scripting API\\PlanCrossCheck\\Final Script\\Release 1.5.2 - z_Air sampling/**)",
+      "Read(/C:\\Users\\rss\\Documents\\Eclipse Scripting API\\PlanCrossCheck\\Final Script/**)",
+      "Read(/C:\\Users\\rss\\Documents\\Eclipse Scripting API\\PlanCrossCheck/**)"
     ],
     "deny": [],
     "ask": []

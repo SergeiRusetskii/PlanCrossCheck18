@@ -75,7 +75,6 @@ The project uses a composite validator pattern:
 ## Version History
 
 - v1.5.7: Current version
-- Previous versions available in Script V1.0, V1.2, V1.3 folders
 
 ## License
 

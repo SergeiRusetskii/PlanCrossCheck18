@@ -15,8 +15,33 @@ namespace PlanCrossCheck
             var rootValidator = new RootValidator();
             var results = rootValidator.Validate(context);
 
-            // Add all results to the observable collection
-            foreach (var result in results)
+            // Post-process results: if a validator produced a result per field and
+            // every field passed (Info severity), collapse these into a single
+            // summary result so the UI only shows the total result.
+            var processedResults = results
+                .GroupBy(r => r.Category)
+                .SelectMany(group =>
+                {
+                    bool allPass = group.All(r => r.Severity == ValidationSeverity.Info);
+                    bool allFieldMessages = group.All(r => r.Message.StartsWith("Field '"));
+
+                    if (allPass && allFieldMessages)
+                    {
+                        return new[]
+                        {
+                            new ValidationResult
+                            {
+                                Category = group.Key,
+                                Severity = ValidationSeverity.Info,
+                                Message = $"All treatment fields passed {group.Key} checks"
+                            }
+                        };
+                    }
+
+                    return group;
+                });
+
+            foreach (var result in processedResults)
             {
                 ValidationResults.Add(result);
             }

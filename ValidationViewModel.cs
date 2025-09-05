@@ -22,10 +22,12 @@ namespace PlanCrossCheck
                 .GroupBy(r => r.Category)
                 .SelectMany(group =>
                 {
-                    bool allPass = group.All(r => r.Severity == ValidationSeverity.Info);
-                    bool allFieldMessages = group.All(r => r.Message.StartsWith("Field '"));
+                    var groupList = group.ToList();
+                    bool allPass = groupList.All(r => r.Severity == ValidationSeverity.Info);
+                    bool allFieldMessages = groupList.All(r => r.Message.StartsWith("Field '"));
+                    bool hasMultipleResults = groupList.Count > 1;
 
-                    if (allPass && allFieldMessages)
+                    if (allPass && allFieldMessages && hasMultipleResults)
                     {
                         return new[]
                         {
@@ -38,7 +40,7 @@ namespace PlanCrossCheck
                         };
                     }
 
-                    return group;
+                    return groupList;
                 });
 
             foreach (var result in processedResults)

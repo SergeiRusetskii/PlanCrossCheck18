@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using VMS.TPS.Common.Model.API;
@@ -24,10 +25,10 @@ namespace PlanCrossCheck
                 {
                     var fieldResults = group.ToList();
                     bool allPass = fieldResults.All(r => r.Severity == ValidationSeverity.Info);
-                    bool allFieldMessages = fieldResults.All(r => r.Message.StartsWith("Field '"));
+                    bool allFieldMessages = fieldResults.All(r => r.Message.StartsWith("Field '", StringComparison.Ordinal));
                     int fieldCount = fieldResults.Count;
 
-                    if (allPass && allFieldMessages)
+                    if (allPass && allFieldMessages && fieldCount > 1)
                     {
                         return new[]
                         {
@@ -35,9 +36,7 @@ namespace PlanCrossCheck
                             {
                                 Category = group.Key,
                                 Severity = ValidationSeverity.Info,
-                                Message = fieldCount == 1
-                                    ? $"Field passed {group.Key} checks"
-                                    : $"All {fieldCount} treatment fields passed {group.Key} checks"
+                                Message = $"All {fieldCount} treatment fields passed {group.Key} checks"
                             }
                         };
                     }

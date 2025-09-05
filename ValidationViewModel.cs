@@ -24,10 +24,10 @@ namespace PlanCrossCheck
                 {
                     var groupList = group.ToList();
                     bool allPass = groupList.All(r => r.Severity == ValidationSeverity.Info);
-                    bool allFieldMessages = groupList.All(r => r.Message.StartsWith("Field '"));
+                    bool allFieldResults = groupList.All(r => r.IsFieldResult);
                     bool hasMultipleResults = groupList.Count > 1;
 
-                    if (allPass && allFieldMessages && hasMultipleResults)
+                    if (allPass && allFieldResults && hasMultipleResults)
                     {
                         return new[]
                         {
@@ -61,6 +61,9 @@ namespace PlanCrossCheck
         public string Message { get; set; }
         public string Category { get; set; }
         public ValidationSeverity Severity { get; set; }
+
+        // Indicates whether this result relates to an individual field
+        public bool IsFieldResult { get; set; }
 
         // Optional computed property for backward compatibility
         public bool IsValid => Severity != ValidationSeverity.Error;

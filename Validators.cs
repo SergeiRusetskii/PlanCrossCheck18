@@ -147,8 +147,6 @@ namespace PlanCrossCheck
                             isGated ? ValidationSeverity.Info : ValidationSeverity.Error
                         ));
                     }
-
-                    
                 }
             }
 

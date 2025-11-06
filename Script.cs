@@ -20,6 +20,12 @@ namespace VMS.TPS
                 return;
             }
 
+            if (context.PlanSetup == null)
+            {
+                MessageBox.Show("Please load a plan before running this script.", "No Plan Loaded", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             var mainControl = new PlanCrossCheck.MainControl
             {
                 DataContext = new PlanCrossCheck.ValidationViewModel(context)

@@ -800,20 +800,19 @@ namespace PlanCrossCheck
                                     ? $"Aperture Shape Controller is set to '{ascValue}' for Edge SRS plan"
                                     : $"Aperture Shape Controller is set to '{ascValue}' - " +
                                     $"not 'High' or 'Very High' for Edge SRS plans",
-                                isValidASC 
-                                    ? ValidationSeverity.Info 
+                                isValidASC
+                                    ? ValidationSeverity.Info
                                     : ValidationSeverity.Warning
                             ));
                         }
-                    }
-                    
-                    else
-                    {
-                        results.Add(CreateResult(
-                            "Plan.Optimization",
-                            "Cannot determine Aperture Shape Controller setting for Edge SRS plan",
-                            ValidationSeverity.Warning
-                        ));
+                        else
+                        {
+                            results.Add(CreateResult(
+                                "Plan.Optimization",
+                                "Cannot determine Aperture Shape Controller setting for Edge SRS plan",
+                                ValidationSeverity.Warning
+                            ));
+                        }
                     }
                 }
             }

@@ -182,7 +182,7 @@ namespace PlanCrossCheck
 
                 // Z coordinate is shown as Y in Eclipse UI
                 double zOffset = Math.Abs(userOrigin.z / 10.0); // mm to cm
-                bool isZvalid = xOffset <= 0.5;
+                bool isZvalid = zOffset <= 0.5;
 
                 results.Add(CreateResult(
                         "CT.UserOrigin",

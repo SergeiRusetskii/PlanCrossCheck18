@@ -186,8 +186,8 @@ namespace PlanCrossCheck
 
                 results.Add(CreateResult(
                         "CT.UserOrigin",
-                        isZvalid ? $"User Origin X coordinate ({userOrigin.z / 10:F1} cm) is within 0.5 cm limits"
-                            : $"User Origin X coordinate ({userOrigin.z / 10:F1} cm) is outside acceptable limits",
+                        isZvalid ? $"User Origin Y coordinate ({userOrigin.z / 10:F1} cm) is within 0.5 cm limits"
+                            : $"User Origin Y coordinate ({userOrigin.z / 10:F1} cm) is outside acceptable limits",
                         isZvalid ? ValidationSeverity.Info : ValidationSeverity.Warning
                     ));
 

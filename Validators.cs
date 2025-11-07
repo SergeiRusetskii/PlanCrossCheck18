@@ -829,6 +829,25 @@ namespace PlanCrossCheck
         {
             var results = new List<ValidationResult>();
 
+            // Check all reference points for RP_ prefix and Target type
+            if (context.PlanSetup?.ReferencePoints != null)
+            {
+                foreach (var refPoint in context.PlanSetup.ReferencePoints)
+                {
+                    if (refPoint.Id.StartsWith("RP_", StringComparison.OrdinalIgnoreCase))
+                    {
+                        bool isTargetType = refPoint.ReferencePointType == ReferencePointType.Target;
+                        results.Add(CreateResult(
+                            "Dose.ReferencePoint",
+                            isTargetType
+                                ? $"Reference point '{refPoint.Id}' correctly has type 'Target'"
+                                : $"Reference point '{refPoint.Id}' should have type 'Target' (current: {refPoint.ReferencePointType})",
+                            isTargetType ? ValidationSeverity.Info : ValidationSeverity.Warning
+                        ));
+                    }
+                }
+            }
+
             if (context.PlanSetup?.PrimaryReferencePoint != null)
             {
                 var refPoint = context.PlanSetup.PrimaryReferencePoint;

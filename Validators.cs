@@ -460,15 +460,16 @@ namespace PlanCrossCheck
                 return null;
 
             // Select the "upper" intersection based on orientation
+            // In DICOM: y increases toward posterior (back)
             if (isSupine)
             {
-                // For supine: upper = most anterior = largest y
-                return intersections.OrderByDescending(p => p.y).First();
+                // For supine: upper = most anterior = smallest y
+                return intersections.OrderBy(p => p.y).First();
             }
             else
             {
-                // For prone: upper = most posterior = smallest y
-                return intersections.OrderBy(p => p.y).First();
+                // For prone: upper = most posterior = largest y
+                return intersections.OrderByDescending(p => p.y).First();
             }
         }
 

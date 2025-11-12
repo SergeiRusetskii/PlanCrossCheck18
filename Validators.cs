@@ -633,10 +633,11 @@ namespace PlanCrossCheck
                 // For plans without couch rotation
                 if (!PlanUtilities.HasAnyFieldWithCouch(beams))
                 {
-                    var treatmentBeams = beams.Where(b => !b.IsSetupField).ToList();
-                    if (treatmentBeams.Any())
+                    // Use BeamsInTreatmentOrder to get the actual first field in treatment delivery order
+                    var firstBeam = context.PlanSetup.BeamsInTreatmentOrder
+                        .FirstOrDefault(b => !b.IsSetupField);
+                    if (firstBeam != null)
                     {
-                        var firstBeam = treatmentBeams.First();
                         double firstGantryAngle = firstBeam.ControlPoints.First().GantryAngle;
 
                         // Find angle closest to 180

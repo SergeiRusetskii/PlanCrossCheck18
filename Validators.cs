@@ -28,6 +28,10 @@ namespace PlanCrossCheck
         public static bool ContainsSRS(string technique) =>
             technique?.Contains("SRS") ?? false;
 
+        // Constants for collision assessment
+        private const double ANGLE_TOLERANCE_DEGREES = 0.1;
+        private const double STATIC_FIELD_SECTOR_DEGREES = 10.0;
+
         // Arc analysis helpers for collision assessment
 
         /// <summary>
@@ -39,7 +43,7 @@ namespace PlanCrossCheck
             double endAngle = beam.ControlPoints.Last().GantryAngle;
 
             // If start == end, it's a static field (0 degrees)
-            if (Math.Abs(startAngle - endAngle) < 0.1)
+            if (Math.Abs(startAngle - endAngle) < ANGLE_TOLERANCE_DEGREES)
                 return 0;
 
             // Calculate span based on gantry direction
@@ -58,7 +62,7 @@ namespace PlanCrossCheck
             }
 
             // Handle the case where span is 0 (full 360)
-            if (span < 0.1)
+            if (span < ANGLE_TOLERANCE_DEGREES)
                 span = 360;
 
             return span;
@@ -88,7 +92,8 @@ namespace PlanCrossCheck
 
         /// <summary>
         /// Build list of angular sectors covered by treatment beams
-        /// Returns list of (startAngle, endAngle) pairs
+        /// Returns list of normalized (startAngle, endAngle) pairs where start <= end
+        /// Wraparound sectors are split into multiple non-wrapping sectors
         /// </summary>
         public static List<(double start, double end)> GetCoveredAngularSectors(IEnumerable<Beam> treatmentBeams)
         {
@@ -99,30 +104,34 @@ namespace PlanCrossCheck
                 double startAngle = beam.ControlPoints.First().GantryAngle;
                 double endAngle = beam.ControlPoints.Last().GantryAngle;
 
-                if (Math.Abs(startAngle - endAngle) < 0.1)
+                // Normalize angles to 0-360
+                startAngle = (startAngle + 360) % 360;
+                endAngle = (endAngle + 360) % 360;
+
+                if (Math.Abs(startAngle - endAngle) < ANGLE_TOLERANCE_DEGREES)
                 {
-                    // Static field: add +/- 10 degrees
-                    double staticStart = (startAngle - 10 + 360) % 360;
-                    double staticEnd = (startAngle + 10) % 360;
-                    sectors.Add((staticStart, staticEnd));
+                    // Static field: add +/- STATIC_FIELD_SECTOR_DEGREES
+                    double staticStart = startAngle - STATIC_FIELD_SECTOR_DEGREES;
+                    double staticEnd = startAngle + STATIC_FIELD_SECTOR_DEGREES;
+
+                    // Normalize and add (may create wraparound sector)
+                    staticStart = (staticStart + 360) % 360;
+                    staticEnd = (staticEnd + 360) % 360;
+
+                    // Add normalized sectors (split if wraparound)
+                    sectors.AddRange(NormalizeSector(staticStart, staticEnd));
                 }
                 else
                 {
                     // Arc: add the sector based on direction
-                    if (beam.GantryDirection == GantryDirection.Clockwise)
-                    {
-                        // CW: start -> end going backwards
-                        sectors.Add((startAngle, endAngle));
-                    }
-                    else
-                    {
-                        // CCW: start -> end going forwards
-                        sectors.Add((startAngle, endAngle));
-                    }
+                    // For CW: sector goes from start decreasing to end
+                    // For CCW: sector goes from start increasing to end
+                    // Note: Both directions store as (start, end) but interpretation differs
+                    sectors.AddRange(NormalizeSector(startAngle, endAngle));
                 }
             }
 
-            // Merge overlapping sectors
+            // Normalize all sectors and merge overlapping ones
             return MergeSectors(sectors);
         }
 
@@ -131,6 +140,10 @@ namespace PlanCrossCheck
         /// </summary>
         public static bool IsAngleInSectors(double angle, List<(double start, double end)> sectors)
         {
+            // Null/empty check
+            if (sectors == null || !sectors.Any())
+                return false;
+
             // Normalize angle to 0-360
             angle = (angle + 360) % 360;
 
@@ -143,34 +156,57 @@ namespace PlanCrossCheck
             return false;
         }
 
-        // Helper: Check if angle is within a single sector (handling wraparound)
-        private static bool IsAngleInSector(double angle, double start, double end)
+        /// <summary>
+        /// Normalize a sector by splitting wraparound sectors into non-wrapping parts
+        /// Example: (350, 10) becomes [(350, 360), (0, 10)]
+        /// Example: (90, 270) stays as [(90, 270)]
+        /// </summary>
+        private static List<(double start, double end)> NormalizeSector(double start, double end)
         {
-            // Normalize all angles to 0-360
-            angle = (angle + 360) % 360;
+            var normalized = new List<(double start, double end)>();
+
+            // Ensure angles are in 0-360 range
             start = (start + 360) % 360;
             end = (end + 360) % 360;
 
             if (start <= end)
             {
-                // Normal case: sector doesn't wrap around 0
-                return angle >= start && angle <= end;
+                // Normal sector - no wraparound
+                normalized.Add((start, end));
             }
             else
             {
-                // Wraparound case: sector crosses 0 (e.g., 350 to 10)
-                return angle >= start || angle <= end;
+                // Wraparound sector - split into two parts
+                // Part 1: from start to 360
+                normalized.Add((start, 360));
+                // Part 2: from 0 to end
+                normalized.Add((0, end));
             }
+
+            return normalized;
         }
 
-        // Helper: Merge overlapping sectors
+        /// <summary>
+        /// Check if angle is within a single normalized sector (where start <= end, no wraparound)
+        /// </summary>
+        private static bool IsAngleInSector(double angle, double start, double end)
+        {
+            // Since sectors are normalized, start <= end always
+            // No need to re-normalize angle if already normalized by caller
+            return angle >= start && angle <= end;
+        }
+
+        /// <summary>
+        /// Merge overlapping or adjacent normalized sectors
+        /// Assumes all sectors have start <= end (no wraparound)
+        /// </summary>
         private static List<(double start, double end)> MergeSectors(List<(double start, double end)> sectors)
         {
             if (sectors.Count <= 1)
                 return sectors;
 
-            // Sort by start angle
-            var sorted = sectors.OrderBy(s => s.start).ToList();
+            // Sort by start angle, then by end angle
+            var sorted = sectors.OrderBy(s => s.start).ThenBy(s => s.end).ToList();
             var merged = new List<(double start, double end)>();
             var current = sorted[0];
 
@@ -178,13 +214,12 @@ namespace PlanCrossCheck
             {
                 var next = sorted[i];
 
-                // Check if sectors overlap or are adjacent
-                if (IsAngleInSector(next.start, current.start, current.end) ||
-                    Math.Abs(next.start - current.end) < 1)
+                // Check if sectors overlap or are adjacent (within 1 degree tolerance)
+                // Since all sectors are normalized (start <= end), comparison is simple
+                if (next.start <= current.end + 1.0)
                 {
                     // Merge sectors - extend current to include next
-                    // Need to handle wraparound carefully
-                    current = (current.start, next.end);
+                    current = (current.start, Math.Max(current.end, next.end));
                 }
                 else
                 {
@@ -197,24 +232,25 @@ namespace PlanCrossCheck
             // Add the last sector
             merged.Add(current);
 
+            // Special case: check if first and last sectors should merge across 0/360 boundary
+            // If we have sectors like [(0, 30), (340, 360)], they represent a wraparound
+            // and should stay as two separate sectors (already normalized)
+            // No additional merging needed across the boundary
+
             return merged;
         }
 
-        // Helper: Calculate total coverage from merged sectors
+        /// <summary>
+        /// Calculate total angular coverage from normalized sectors
+        /// Assumes all sectors have start <= end (no wraparound)
+        /// </summary>
         private static double CalculateTotalCoverage(List<(double start, double end)> sectors)
         {
             double total = 0;
             foreach (var sector in sectors)
             {
-                if (sector.start <= sector.end)
-                {
-                    total += sector.end - sector.start;
-                }
-                else
-                {
-                    // Wraparound
-                    total += (360 - sector.start) + sector.end;
-                }
+                // Since sectors are normalized, simply add the span
+                total += sector.end - sector.start;
             }
             return total;
         }

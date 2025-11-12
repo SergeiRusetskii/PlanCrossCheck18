@@ -35,7 +35,7 @@ PlanCrossCheck is an Eclipse Scripting API (ESAPI) plugin that provides systemat
 ## Usage
 
 1. Load a treatment plan in Eclipse
-2. Navigate to Scripts menu and select "Cross-check v1.5.7"
+2. Navigate to Scripts menu and select "Cross-check v1.6.0"
 3. The validation tool will automatically analyze the current plan
 4. Review results organized by category with severity indicators:
    - 🔴 **Error**: Critical issues that must be addressed
@@ -74,7 +74,8 @@ The project uses a composite validator pattern:
 
 ## Version History
 
-- v1.5.7: Current version
+- v1.6.0: Edge collision assessment with sector-based filtering, wraparound fix
+- v1.5.7: Previous version
 
 ## License
 

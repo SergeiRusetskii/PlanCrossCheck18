@@ -69,5 +69,5 @@ The validation system uses a composite pattern where:
 
 ## Version Management
 
-Current version: v1.5.7 (as shown in Script.cs window title)
+Current version: v1.6.0 (as shown in Script.cs window title)
 Versioned releases are stored in directories like "Script V1.0", "Script V1.2", etc.

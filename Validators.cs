@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
 using System.Text.RegularExpressions;
 using VMS.TPS.Common.Model.API;
 using VMS.TPS.Common.Model.Types;
@@ -148,8 +147,6 @@ namespace PlanCrossCheck
                             isGated ? ValidationSeverity.Info : ValidationSeverity.Error
                         ));
                     }
-
-                    
                 }
             }
 
@@ -182,12 +179,12 @@ namespace PlanCrossCheck
 
                 // Z coordinate is shown as Y in Eclipse UI
                 double zOffset = Math.Abs(userOrigin.z / 10.0); // mm to cm
-                bool isZvalid = xOffset <= 0.5;
+                bool isZvalid = zOffset <= 0.5;
 
                 results.Add(CreateResult(
                         "CT.UserOrigin",
-                        isZvalid ? $"User Origin X coordinate ({userOrigin.z / 10:F1} cm) is within 0.5 cm limits"
-                            : $"User Origin X coordinate ({userOrigin.z / 10:F1} cm) is outside acceptable limits",
+                        isZvalid ? $"User Origin Y coordinate ({userOrigin.z / 10:F1} cm) is within 0.5 cm limits"
+                            : $"User Origin Y coordinate ({userOrigin.z / 10:F1} cm) is outside acceptable limits",
                         isZvalid ? ValidationSeverity.Info : ValidationSeverity.Warning
                     ));
 
@@ -800,20 +797,19 @@ namespace PlanCrossCheck
                                     ? $"Aperture Shape Controller is set to '{ascValue}' for Edge SRS plan"
                                     : $"Aperture Shape Controller is set to '{ascValue}' - " +
                                     $"not 'High' or 'Very High' for Edge SRS plans",
-                                isValidASC 
-                                    ? ValidationSeverity.Info 
+                                isValidASC
+                                    ? ValidationSeverity.Info
                                     : ValidationSeverity.Warning
                             ));
                         }
-                    }
-                    
-                    else
-                    {
-                        results.Add(CreateResult(
-                            "Plan.Optimization",
-                            "Cannot determine Aperture Shape Controller setting for Edge SRS plan",
-                            ValidationSeverity.Warning
-                        ));
+                        else
+                        {
+                            results.Add(CreateResult(
+                                "Plan.Optimization",
+                                "Cannot determine Aperture Shape Controller setting for Edge SRS plan",
+                                ValidationSeverity.Warning
+                            ));
+                        }
                     }
                 }
             }

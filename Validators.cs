@@ -47,18 +47,21 @@ namespace PlanCrossCheck
                 return 0;
 
             // Calculate span based on gantry direction
+            // NOTE: Gantry cannot go through 180° in either direction
             double span;
             if (beam.GantryDirection == GantryDirection.Clockwise)
             {
-                // CW: going from start decreasing to end
-                // Example: 200 CW 160 = 200→270→0→90→160 = 320 degrees
-                span = (startAngle - endAngle + 360) % 360;
+                // CW: angles INCREASE (0→90→270→0, skipping 180)
+                // Example: 181 CW 179 = 181→270→0→179 = 358 degrees
+                // Example: 200 CW 220 = 200→210→220 = 20 degrees
+                span = (endAngle - startAngle + 360) % 360;
             }
             else // CounterClockwise
             {
-                // CCW: going from start increasing to end
-                // Example: 160 CCW 200 = 160→180→200 = 40 degrees
-                span = (endAngle - startAngle + 360) % 360;
+                // CCW: angles DECREASE (0→270→90→0, skipping 180)
+                // Example: 220 CCW 200 = 220→210→200 = 20 degrees
+                // Example: 10 CCW 350 = 10→0→350 = 20 degrees
+                span = (startAngle - endAngle + 360) % 360;
             }
 
             // Handle the case where span is 0 (full 360)
@@ -123,11 +126,36 @@ namespace PlanCrossCheck
                 }
                 else
                 {
-                    // Arc: add the sector based on direction
-                    // For CW: sector goes from start decreasing to end
-                    // For CCW: sector goes from start increasing to end
-                    // Note: Both directions store as (start, end) but interpretation differs
-                    sectors.AddRange(NormalizeSector(startAngle, endAngle));
+                    // Arc: respect gantry direction when building sectors
+                    if (beam.GantryDirection == GantryDirection.Clockwise)
+                    {
+                        // CW: angles INCREASE from startAngle to endAngle
+                        if (startAngle > endAngle)
+                        {
+                            // Wraparound case: e.g., 181 CW 179 → [(181,360), (0,179)]
+                            sectors.AddRange(NormalizeSector(startAngle, endAngle));
+                        }
+                        else
+                        {
+                            // Normal case: e.g., 200 CW 220 → [(200,220)]
+                            sectors.Add((startAngle, endAngle));
+                        }
+                    }
+                    else // CounterClockwise
+                    {
+                        // CCW: angles DECREASE from startAngle to endAngle
+                        // Sector bounds are REVERSED (endAngle to startAngle)
+                        if (startAngle > endAngle)
+                        {
+                            // Normal case: e.g., 220 CCW 200 → [(200,220)]
+                            sectors.Add((endAngle, startAngle));
+                        }
+                        else
+                        {
+                            // Wraparound case: e.g., 10 CCW 350 → [(350,360), (0,10)]
+                            sectors.AddRange(NormalizeSector(endAngle, startAngle));
+                        }
+                    }
                 }
             }
 

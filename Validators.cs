@@ -2055,7 +2055,7 @@ namespace PlanCrossCheck
                                     {
                                         // Get voxel position in DICOM coordinates
                                         double xPos = origin.x + x * xRes;
-                                        double yPos = origin.y + yRes;
+                                        double yPos = origin.y + y * yRes;
 
                                         // Check if voxel is inside structure
                                         if (structure.IsPointInsideSegment(new VVector(xPos, yPos, zPos)))

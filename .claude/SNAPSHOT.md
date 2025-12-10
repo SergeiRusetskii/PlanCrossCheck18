@@ -1,0 +1,143 @@
+# SNAPSHOT — PlanCrossCheck
+
+*Framework: Claude Code Starter v2.1*
+*Last updated: 2025-12-10*
+
+---
+
+## Current State
+
+**Version:** v1.6.0
+**Status:** Active development - Quality assurance validation tool
+**Branch:** main
+
+---
+
+## Project Overview
+
+**Name:** PlanCrossCheck
+**Description:** C# Eclipse Scripting API (ESAPI) plugin for Varian Eclipse treatment planning system that performs comprehensive quality assurance checks on radiation therapy treatment plans.
+
+**Tech Stack:**
+- C# / .NET Framework 4.8
+- WPF (Windows Presentation Foundation)
+- Varian Eclipse Scripting API (ESAPI) v16.1+
+  - VMS.TPS.Common.Model.API
+  - VMS.TPS.Common.Model.Types
+- Platform: x64
+
+---
+
+## Planning Documents
+
+> **Planning:**
+> - 🎯 Current sprint tasks: [BACKLOG.md](./BACKLOG.md)
+> - 🗺️ Strategic roadmap: [ROADMAP.md](./ROADMAP.md)
+> - 💡 Ideas & experiments: [IDEAS.md](./IDEAS.md)
+> - 📊 Architecture & code structure: [ARCHITECTURE.md](./ARCHITECTURE.md)
+
+---
+
+## Current Structure
+
+```
+PlanCrossCheck/
+├── Script.cs                    # ESAPI plugin entry point
+├── Validators.cs                # Composite validation engine
+├── ValidationViewModel.cs       # MVVM view model for results
+├── MainControl.xaml/.cs         # WPF UI for displaying results
+├── SeverityToColorConverter.cs  # UI converter for severity colors
+├── .claude/                     # Framework files
+│   ├── SNAPSHOT.md             # This file
+│   ├── BACKLOG.md              # Current sprint tasks
+│   ├── ROADMAP.md              # Strategic planning
+│   ├── IDEAS.md                # Ideas & experiments
+│   └── ARCHITECTURE.md         # Code architecture
+├── Documentation/
+│   ├── VMS.TPS.Common.Model.API.xml    # ESAPI API reference
+│   └── VMS.TPS.Common.Model.Types.xml  # ESAPI Types reference
+└── Final Script/               # Version history folders
+    ├── Script V1.0/
+    ├── Script V1.2/
+    ├── Script V1.3/
+    └── Release 1.5.2/
+```
+
+---
+
+## Recent Progress
+
+- [x] Implemented composite validator pattern architecture
+- [x] Created WPF UI with severity-based color coding
+- [x] Added PTV-to-Body surface proximity check (v1.5.x)
+- [x] Fixed critical Y voxel position scaling bug in air density validator
+- [x] Migrated to Claude Code Starter Framework v2.1 (2025-12-10)
+
+---
+
+## Active Work
+
+**Phase 1: Framework Migration & Documentation**
+- [x] Migrate to Claude Code Starter Framework v2.1
+- [ ] Update documentation with ESAPI reference information
+- [ ] Document existing validators and their validation logic
+- [ ] Create developer guide for adding new validators
+
+See [BACKLOG.md](./BACKLOG.md) for detailed task list.
+
+---
+
+## Next Steps
+
+**Immediate:**
+- Complete framework migration documentation
+- Document all existing validators with examples
+- Add XML documentation comments to code
+
+**Short-term (v1.7.0):**
+- Expand validation coverage (beam geometry, MLC positions)
+- Enhanced error messages with recommendations
+- Add configurable tolerance thresholds
+
+**Long-term:**
+- User configuration system (v2.0.0)
+- PDF/CSV export capabilities
+- Protocol compliance validation (v2.5.0)
+
+See [ROADMAP.md](./ROADMAP.md) for full strategic plan.
+
+---
+
+## Key Concepts
+
+### Validation Architecture
+- **Composite Pattern:** Hierarchical validator structure with RootValidator orchestrating checks
+- **ValidatorBase:** Abstract base class for all validators
+- **CompositeValidator:** Base for validators containing child validators
+- **ValidationResult:** Contains message, severity (Error/Warning/Info), and category
+
+### ESAPI Integration
+- Plugin DLL: `TEST_Cross_Check.esapi.dll`
+- Requires x64 platform targeting
+- Accessed via Eclipse Script menu
+- Works with ScriptContext providing access to plan data
+
+### Build Process
+```bash
+# Release build
+msbuild PlanCrossCheck.sln /p:Configuration=Release /p:Platform=x64
+```
+
+---
+
+## Reference Documentation
+
+**ESAPI XML Documentation:**
+- API Classes: [/Documentation/VMS.TPS.Common.Model.API.xml](../Documentation/VMS.TPS.Common.Model.API.xml)
+- Types: [/Documentation/VMS.TPS.Common.Model.Types.xml](../Documentation/VMS.TPS.Common.Model.Types.xml)
+
+**Use Context7 MCP:** For ESAPI code examples and best practices when implementing validators.
+
+---
+
+*Quick-start context for AI sessions*

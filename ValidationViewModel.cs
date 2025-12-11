@@ -55,17 +55,4 @@ namespace PlanCrossCheck
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-
-    public class ValidationResult
-    {
-        public string Message { get; set; }
-        public string Category { get; set; }
-        public ValidationSeverity Severity { get; set; }
-
-        // Indicates whether this result relates to an individual field
-        public bool IsFieldResult { get; set; }
-
-        // Optional computed property for backward compatibility
-        public bool IsValid => Severity != ValidationSeverity.Error;
-    }
 }

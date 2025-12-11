@@ -21,18 +21,44 @@ PlanCrossCheck is a C# Eclipse Scripting API (ESAPI) plugin that provides compre
 ```
 PlanCrossCheck/
 ├── Script.cs                       # ESAPI plugin entry point
-├── Validators.cs                   # Validation engine implementation
 ├── ValidationViewModel.cs          # MVVM view model
 ├── MainControl.xaml                # WPF UI markup
 ├── MainControl.xaml.cs             # WPF UI code-behind
 ├── SeverityToColorConverter.cs     # WPF value converter
+│
+├── Validators/                     # Validation engine (modular structure)
+│   ├── Base/                       # Base classes and enums
+│   │   ├── ValidationSeverity.cs   # Info/Warning/Error enum
+│   │   ├── ValidationResult.cs     # Validation result data class
+│   │   ├── ValidatorBase.cs        # Abstract base validator
+│   │   └── CompositeValidator.cs   # Composite pattern base
+│   ├── Utilities/
+│   │   └── PlanUtilities.cs        # Helper methods (machine detection, arc analysis)
+│   ├── RootValidator.cs            # Top-level validator coordinator
+│   ├── CourseValidator.cs          # Course ID validation
+│   ├── PlanValidator.cs            # Plan-level composite validator
+│   ├── CTAndPatientValidator.cs    # User origin & CT device validation
+│   ├── UserOriginMarkerValidator.cs # CT marker detection
+│   ├── DoseValidator.cs            # Dose grid, energy, technique validation
+│   ├── FieldsValidator.cs          # Fields composite validator
+│   ├── FieldNamesValidator.cs      # Field naming conventions
+│   ├── GeometryValidator.cs        # Collimator, isocenter, MLC validation
+│   ├── SetupFieldsValidator.cs     # Setup field configuration
+│   ├── OptimizationValidator.cs    # Jaw tracking, ASC validation
+│   ├── ReferencePointValidator.cs  # Reference point & prescription validation
+│   ├── FixationValidator.cs        # Fixation devices & collision checks
+│   ├── PlanningStructuresValidator.cs # Air structure validation
+│   └── PTVBodyProximityValidator.cs # PTV-to-Body distance checks
 │
 ├── .claude/                        # Framework files
 │   ├── SNAPSHOT.md                 # Project snapshot
 │   ├── BACKLOG.md                  # Current sprint tasks
 │   ├── ROADMAP.md                  # Strategic roadmap
 │   ├── IDEAS.md                    # Ideas & experiments
-│   └── ARCHITECTURE.md             # This file
+│   ├── ARCHITECTURE.md             # This file
+│   ├── ESAPI_VALIDATION_REPORT.md  # ESAPI usage verification
+│   ├── VALIDATORS_REFERENCE.md     # Validator documentation
+│   └── DEVELOPER_GUIDE.md          # Guide for adding validators
 │
 ├── Documentation/                  # ESAPI Reference Documentation
 │   ├── VMS.TPS.Common.Model.API.xml      # API reference (519KB)
@@ -72,28 +98,38 @@ PlanCrossCheck/
 - Receives `ScriptContext context` parameter
 - Access to: `context.Patient`, `context.Course`, `context.PlanSetup`
 
-### 2. Validators.cs
-**Location:** `Validators.cs`
+### 2. Validators (Modular Architecture)
+**Location:** `Validators/` directory
 **Purpose:** Composite pattern validation engine
+
+**Structure:**
+The validation system has been refactored into a modular directory structure for better maintainability. Previously contained in a single 2,230-line `Validators.cs` file, now organized into 20 separate files.
 
 **Class Hierarchy:**
 ```
-ValidatorBase (abstract)
-├── CompositeValidator (abstract)
-│   └── RootValidator
-│       ├── PlanParametersValidator
-│       ├── DoseCalculationValidator
-│       ├── StructureValidator
-│       ├── BeamValidator
-│       └── [other category validators]
-└── [Individual validators]
-    ├── PrescriptionValidator
-    ├── DoseGridValidator
-    ├── TargetCoverageValidator
-    ├── AirDensityValidator
-    ├── PTVBodyProximityValidator
-    └── [etc.]
+ValidatorBase (abstract)                    → Validators/Base/ValidatorBase.cs
+├── CompositeValidator (abstract)           → Validators/Base/CompositeValidator.cs
+│   ├── RootValidator                       → Validators/RootValidator.cs
+│   │   ├── CourseValidator                 → Validators/CourseValidator.cs
+│   │   └── PlanValidator                   → Validators/PlanValidator.cs
+│   │       ├── CTAndPatientValidator       → Validators/CTAndPatientValidator.cs
+│   │       ├── UserOriginMarkerValidator   → Validators/UserOriginMarkerValidator.cs
+│   │       ├── DoseValidator               → Validators/DoseValidator.cs
+│   │       ├── FieldsValidator             → Validators/FieldsValidator.cs
+│   │       │   ├── FieldNamesValidator     → Validators/FieldNamesValidator.cs
+│   │       │   ├── GeometryValidator       → Validators/GeometryValidator.cs
+│   │       │   └── SetupFieldsValidator    → Validators/SetupFieldsValidator.cs
+│   │       ├── OptimizationValidator       → Validators/OptimizationValidator.cs
+│   │       ├── ReferencePointValidator     → Validators/ReferencePointValidator.cs
+│   │       ├── FixationValidator           → Validators/FixationValidator.cs
+│   │       ├── PlanningStructuresValidator → Validators/PlanningStructuresValidator.cs
+│   │       └── PTVBodyProximityValidator   → Validators/PTVBodyProximityValidator.cs
 ```
+
+**Supporting Classes:**
+- `ValidationSeverity` (enum) → `Validators/Base/ValidationSeverity.cs`
+- `ValidationResult` (class) → `Validators/Base/ValidationResult.cs`
+- `PlanUtilities` (static helpers) → `Validators/Utilities/PlanUtilities.cs`
 
 **Key Methods:**
 - `Validate(ScriptContext context)` - Abstract method all validators implement

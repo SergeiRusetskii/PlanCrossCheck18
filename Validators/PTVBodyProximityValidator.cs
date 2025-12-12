@@ -46,7 +46,9 @@ namespace PlanCrossCheck
                 return results;
             }
 
-            // Check each PTV
+            // Track all PTVs and find closest one
+            var ptvProximities = new List<(Structure PTV, double Distance)>();
+
             foreach (var ptv in ptvStructures)
             {
                 var proximityResult = CalculateMinimumDistanceToBodySurface(
@@ -55,22 +57,37 @@ namespace PlanCrossCheck
                 if (proximityResult.HasValue)
                 {
                     double minDistanceMm = proximityResult.Value.MinDistance;
-                    int sliceIndex = proximityResult.Value.SliceIndex;
-                    VVector location = proximityResult.Value.Location;
+                    ptvProximities.Add((ptv, minDistanceMm));
+                }
+            }
 
-                    // Check if within threshold
-                    if (minDistanceMm <= PROXIMITY_THRESHOLD_MM)
+            // Check proximity results
+            if (ptvProximities.Any())
+            {
+                // Find all PTVs within threshold
+                var ptvsTooClose = ptvProximities.Where(p => p.Distance <= PROXIMITY_THRESHOLD_MM).ToList();
+
+                if (ptvsTooClose.Any())
+                {
+                    // Warning: Show all PTVs that are too close to body surface
+                    foreach (var ptv in ptvsTooClose)
                     {
-                        string message = $"PTV '{ptv.Id}' is {minDistanceMm:F1}mm from body surface " +
-                            $"(slice {sliceIndex}, location: {location.x / 10:F1}, {location.y / 10:F1}, {location.z / 10:F1} cm). " +
-                            $"Consider creating an EVAL structure";
-
                         results.Add(CreateResult(
                             "PlanningStructures.PTV-Body Proximity",
-                            message,
-                            ValidationSeverity.Info
+                            $"PTV {ptv.PTV.Id} is {ptv.Distance:F1} mm from Body surface. Check if you used EVAL structure",
+                            ValidationSeverity.Warning
                         ));
                     }
+                }
+                else
+                {
+                    // Info: All PTVs have acceptable distance - show only closest
+                    var closestPTV = ptvProximities.OrderBy(p => p.Distance).First();
+                    results.Add(CreateResult(
+                        "PlanningStructures.PTV-Body Proximity",
+                        $"Closest PTV {closestPTV.PTV.Id} is {closestPTV.Distance:F1} mm from Body surface",
+                        ValidationSeverity.Info
+                    ));
                 }
             }
 

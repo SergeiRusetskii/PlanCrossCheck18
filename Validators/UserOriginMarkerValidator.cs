@@ -11,16 +11,26 @@ namespace PlanCrossCheck
     public class UserOriginMarkerValidator : ValidatorBase
     {
         // Configuration constants
-        private const double THRESHOLD_HU = 1000.0;
-        private const double RADIUS_MM = 10.0;
+        private const double THRESHOLD_HU = 2000.0;
+        private const double RADIUS_MM = 5.0;
 
         public override IEnumerable<ValidationResult> Validate(ScriptContext context)
         {
             var results = new List<ValidationResult>();
 
             // Check prerequisites
-            if (context.StructureSet?.Image == null)
+            if (context.StructureSet?.Image == null || context.PlanSetup?.Beams == null)
                 return results;
+
+            // Filter out HyperArc plans
+            bool isHyperArc = context.PlanSetup.Beams.Any(b =>
+                PlanUtilities.IsHyperArc(b));
+
+            if (isHyperArc)
+            {
+                // Skip marker detection for HyperArc plans
+                return results;
+            }
 
             var image = context.StructureSet.Image;
             var userOrigin = image.UserOrigin;
@@ -33,7 +43,7 @@ namespace PlanCrossCheck
             if (bodyStructure == null)
             {
                 results.Add(CreateResult(
-                    "CT.UserOrigin.Markers",
+                    "CT.UserOrigin",
                     "Cannot validate user origin markers: BODY structure (type EXTERNAL) not found",
                     ValidationSeverity.Warning
                 ));
@@ -51,8 +61,8 @@ namespace PlanCrossCheck
             if (sliceIndex < 0 || sliceIndex >= image.ZSize)
             {
                 results.Add(CreateResult(
-                    "CT.UserOrigin.Markers",
-                    $"User origin is outside CT image bounds (slice {sliceIndex}, image has {image.ZSize} slices)",
+                    "CT.UserOrigin",
+                    $"User Origin Z coordinate vs CT zero (slice {sliceIndex}, image has {image.ZSize} slices) is outside acceptable limits",
                     ValidationSeverity.Error
                 ));
                 return results;
@@ -108,24 +118,20 @@ namespace PlanCrossCheck
             if (markersDetected == 3)
             {
                 severity = ValidationSeverity.Info;
-                message = $"User origin markers detected (3/3): {string.Join(", ", detectedMarkers)}. " +
-                         $"Positions (cm): {string.Join("; ", detectedPositions.Select(p => $"({p.x/10:F1}, {p.y/10:F1}, {p.z/10:F1})"))}. " +
-                         $"Threshold={THRESHOLD_HU} HU, radius={RADIUS_MM} mm, slice {sliceIndex}±{sliceSpan}";
-            }
-            else if (markersDetected == 2)
-            {
-                severity = ValidationSeverity.Warning;
-                message = $"Partial marker detection (2/3): {string.Join(", ", detectedMarkers)}. " +
-                         $"Check imaging artifact or marker placement on slice {sliceIndex}±{sliceSpan}.";
+                message = $"3 of 3 markers detected in {RADIUS_MM:F0} mm radius around User origin placement";
             }
             else
             {
-                severity = ValidationSeverity.Error;
-                message = $"User origin markers not detected ({markersDetected}/3). " +
-                         $"Check marker placement and imaging (threshold={THRESHOLD_HU} HU, radius={RADIUS_MM} mm).";
+                // Determine which markers are missing
+                var allMarkers = new List<string> { "Left", "Right", "Upper" };
+                var missingMarkers = allMarkers.Except(detectedMarkers).ToList();
+
+                severity = ValidationSeverity.Warning;
+                message = $"{markersDetected} of 3 markers detected in {RADIUS_MM:F0} mm radius around User origin placement\n" +
+                         $"{string.Join("/", missingMarkers)} marker(s) not found (on screen direction)";
             }
 
-            results.Add(CreateResult("CT.UserOrigin.Markers", message, severity));
+            results.Add(CreateResult("CT.UserOrigin", message, severity));
 
             return results;
         }

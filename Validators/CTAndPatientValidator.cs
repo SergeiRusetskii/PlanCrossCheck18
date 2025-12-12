@@ -23,32 +23,52 @@ namespace PlanCrossCheck
                 double xOffset = Math.Abs(userOrigin.x / 10.0); // mm to cm
                 bool isXvalid = xOffset <= 0.5;
 
-                results.Add(CreateResult(
-                        "CT.UserOrigin",
-                        isXvalid ? $"User Origin X coordinate ({userOrigin.x / 10:F1} cm) is within 0.5 cm limits"
-                            : $"User Origin X coordinate ({userOrigin.x / 10:F1} cm) is outside acceptable limits",
-                        isXvalid ? ValidationSeverity.Info : ValidationSeverity.Warning
-                    ));
-
                 // Z coordinate is shown as Y in Eclipse UI
                 double zOffset = Math.Abs(userOrigin.z / 10.0); // mm to cm
                 bool isZvalid = zOffset <= 0.5;
 
-                results.Add(CreateResult(
-                        "CT.UserOrigin",
-                        isZvalid ? $"User Origin Y coordinate ({userOrigin.z / 10:F1} cm) is within 0.5 cm limits"
-                            : $"User Origin Y coordinate ({userOrigin.z / 10:F1} cm) is outside acceptable limits",
-                        isZvalid ? ValidationSeverity.Info : ValidationSeverity.Warning
-                    ));
-
                 // Y coordinate is shown as Z in Eclipse UI (with negative sign)
                 bool isYValid = userOrigin.y >= -500 && userOrigin.y <= -80;
-                results.Add(CreateResult(
-                    "CT.UserOrigin",
-                    isYValid ? $"User Origin Z coordinate ({-userOrigin.y / 10:F1} cm) is within limits"
-                             : $"User Origin Z coordinate ({-userOrigin.y / 10:F1} cm) is outside limits (8 to 50 cm)",
-                    isYValid ? ValidationSeverity.Info : ValidationSeverity.Warning
-                ));
+
+                // If all coordinates are valid, show single combined message
+                if (isXvalid && isZvalid && isYValid)
+                {
+                    results.Add(CreateResult(
+                        "CT.UserOrigin",
+                        "All User Origin vs CT zero coordinates are within limits",
+                        ValidationSeverity.Info
+                    ));
+                }
+                else
+                {
+                    // Show individual messages for failed coordinates
+                    if (!isXvalid)
+                    {
+                        results.Add(CreateResult(
+                            "CT.UserOrigin",
+                            $"User Origin vs CT zero X coordinate ({userOrigin.x / 10:F1} cm) is outside acceptable limits",
+                            ValidationSeverity.Warning
+                        ));
+                    }
+
+                    if (!isZvalid)
+                    {
+                        results.Add(CreateResult(
+                            "CT.UserOrigin",
+                            $"User Origin vs CT zero Y coordinate ({userOrigin.z / 10:F1} cm) is outside acceptable limits",
+                            ValidationSeverity.Warning
+                        ));
+                    }
+
+                    if (!isYValid)
+                    {
+                        results.Add(CreateResult(
+                            "CT.UserOrigin",
+                            $"User Origin vs CT zero Z coordinate ({-userOrigin.y / 10:F1} cm) is outside limits (8 to 50 cm)",
+                            ValidationSeverity.Warning
+                        ));
+                    }
+                }
 
                 // CT imaging device information
                 // Get CT series description and imaging device

@@ -18,7 +18,7 @@ namespace PlanCrossCheck
             {
                 // Check if any field has SRS in technique
                 bool isSRSPlan = context.PlanSetup.Beams.Any(b =>
-                    !b.IsSetupField && b.Technique.ToString().Contains("SRS"));
+                    !b.IsSetupField && PlanUtilities.ContainsSRS(b));
 
                 // Dose grid size validation
                 double doseGridSize = context.PlanSetup.Dose.XRes / 10.0; // Convert mm to cm
@@ -39,7 +39,7 @@ namespace PlanCrossCheck
                 {
                     foreach (var beam in context.PlanSetup.Beams.Where(b => !b.IsSetupField))
                     {
-                        bool hasSRSTechnique = beam.Technique.ToString().Contains("SRS");
+                        bool hasSRSTechnique = PlanUtilities.ContainsSRS(beam);
                         results.Add(CreateResult(
                             "Dose.Technique",
                             hasSRSTechnique

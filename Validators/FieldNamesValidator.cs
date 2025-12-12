@@ -44,21 +44,21 @@ namespace PlanCrossCheck
             double startGantryExact = Math.Round(beam.ControlPoints.First().GantryAngle, 1);
             double endGantryExact = Math.Round(beam.ControlPoints.Last().GantryAngle, 1);
 
-            // Special handling for SRS HyperArc
-            bool isSRSHyperArc = beam.Technique?.ToString().Contains("SRS HyperArc") ?? false;
+            // Special handling for HyperArc (ONLY with couch rotation)
+            bool isHyperArc = PlanUtilities.IsHyperArc(beam);
 
             int startGantry, endGantry;
 
-            if (isSRSHyperArc)
+            if (isHyperArc && hasAnyFieldWithCouch)
             {
-                // Special handling for HyperArc
+                // Special handling for HyperArc with couch rotation
                 // If 180.1, use 181; if 179.9, use 179
-                startGantry = (startGantryExact == 180.1) ? 181 :
-                              (startGantryExact == 179.9) ? 179 :
+                startGantry = (Math.Abs(startGantryExact - 180.1) < 0.01) ? 181 :
+                              (Math.Abs(startGantryExact - 179.9) < 0.01) ? 179 :
                               (int)Math.Round(startGantryExact);
 
-                endGantry = (endGantryExact == 180.1) ? 181 :
-                            (endGantryExact == 179.9) ? 179 :
+                endGantry = (Math.Abs(endGantryExact - 180.1) < 0.01) ? 181 :
+                            (Math.Abs(endGantryExact - 179.9) < 0.01) ? 179 :
                             (int)Math.Round(endGantryExact);
             }
             else

@@ -43,7 +43,7 @@
 ### Development Environment
 - Visual Studio with ESAPI references configured
 - Target: .NET Framework 4.8, x64 platform
-- Output: `TEST_Cross_Check.esapi.dll`
+- Output: `Cross_Check.esapi.dll`
 
 ### ESAPI Reference
 - API documentation: `/Documentation/VMS.TPS.Common.Model.API.xml`

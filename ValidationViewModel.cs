@@ -20,7 +20,7 @@ namespace PlanCrossCheck
             // summary result so the UI only shows the total result.
             var processedResults = results
                 .GroupBy(r => r.Category)
-                .SelectMany(group =>
+                .SelectMany<IGrouping<string, ValidationResult>, ValidationResult>(group =>
                 {
                     var groupList = group.ToList();
                     bool allPass = groupList.All(r => r.Severity == ValidationSeverity.Info);
@@ -43,10 +43,37 @@ namespace PlanCrossCheck
                     return groupList;
                 });
 
-            foreach (var result in processedResults)
+            // Sort results by category order
+            var sortedResults = processedResults
+                .OrderBy(r => GetCategoryOrder(r.Category))
+                .ThenBy(r => r.Category);
+
+            foreach (var result in sortedResults)
             {
                 ValidationResults.Add(result);
             }
+        }
+
+        /// <summary>
+        /// Defines the display order for validation result categories.
+        /// Lower numbers appear first in the UI.
+        /// </summary>
+        private int GetCategoryOrder(string category)
+        {
+            // Define category order
+            if (category.StartsWith("Course")) return 10;
+            if (category.StartsWith("CT.Curve")) return 20;
+            if (category.StartsWith("Plan.Info")) return 30;
+            if (category.StartsWith("PlanningStructures")) return 40;
+            if (category.StartsWith("Fixation")) return 50;
+            if (category.StartsWith("Collision")) return 60;
+            if (category.StartsWith("CT.UserOrigin")) return 70;
+            if (category.StartsWith("Fields")) return 80;
+            if (category.StartsWith("Dose")) return 90;
+            if (category.StartsWith("Optimization")) return 100;
+
+            // Unknown categories appear at the end
+            return 999;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

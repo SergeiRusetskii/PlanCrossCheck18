@@ -18,6 +18,7 @@ namespace PlanCrossCheck
             AddValidator(new FieldsValidator());
             AddValidator(new ReferencePointValidator());
             AddValidator(new FixationValidator());
+            AddValidator(new CollisionValidator());
             AddValidator(new OptimizationValidator());
             AddValidator(new PlanningStructuresValidator());
             AddValidator(new PTVBodyProximityValidator());
@@ -59,6 +60,7 @@ namespace PlanCrossCheck
                         ));
                     }
                 }
+
             }
 
             return results;

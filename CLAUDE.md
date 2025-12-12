@@ -1,4 +1,6 @@
-# CLAUDE.md — AI Agent Instructions
+# CLAUDE.md - AI Agent Instructions
+
+**Build/Test Ownership:** The user handles all builds and Eclipse testing; do not run tests or builds locally—just note required steps for them.
 
 **Framework:** Claude Code Starter v2.1
 **Type:** Meta-framework extending Claude Code capabilities
@@ -131,11 +133,27 @@ echo '{"status": "clean", "timestamp": "'$(date -Iseconds)'"}' > .claude/.last_s
 3. **Local Processing** — no external APIs
 4. **Token Economy** — minimal context loading
 
+## Token Economy Rules
+
+**ALWAYS prioritize framework files over project searches:**
+
+1. **Before Grep/Glob:** Check if `.claude/ARCHITECTURE.md` has the answer
+2. **Before reading code:** Check if `.claude/ARCHITECTURE.md` describes the logic
+3. **For questions about "how X works":** Read framework files FIRST
+
+**Search order:**
+1. `.claude/ARCHITECTURE.md` — comprehensive code structure and logic descriptions
+2. `.claude/BACKLOG.md` / `.claude/SNAPSHOT.md` — current context
+3. Project files (only if framework files lack the answer)
+
+**Why:** Framework files are curated, comprehensive, and token-efficient. Random project searches waste tokens.
+
 ## Warnings
 
 - DO NOT skip Crash Recovery check
 - DO NOT commit without updating metafiles
 - ALWAYS mark session clean at completion
+- DO NOT search project files before reading framework files
 
 ---
 

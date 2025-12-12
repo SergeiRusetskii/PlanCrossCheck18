@@ -557,7 +557,7 @@ double dose = plan.TotalDose.Dose;  // Gy (already in correct units)
 msbuild PlanCrossCheck.sln /p:Configuration=Release /p:Platform=x64
 
 # Output
-bin/Release/TEST_Cross_Check.esapi.dll
+bin/Release/Cross_Check.esapi.dll
 
 # Deploy (copy to Eclipse plugins directory)
 # Restart Eclipse

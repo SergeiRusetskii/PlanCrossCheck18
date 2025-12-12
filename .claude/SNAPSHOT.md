@@ -7,7 +7,7 @@
 
 ## Current State
 
-**Version:** v1.6.0
+**Version:** v1.7.0
 **Status:** Active development - Quality assurance validation tool
 **Branch:** main
 
@@ -72,6 +72,11 @@ PlanCrossCheck/
 - [x] Added PTV-to-Body surface proximity check (v1.5.x)
 - [x] Fixed critical Y voxel position scaling bug in air density validator
 - [x] Migrated to Claude Code Starter Framework v2.1 (2025-12-10)
+- [x] Refactored collision detection into separate CollisionValidator (2025-12-12)
+- [x] Improved validation reporting with category ordering and message consolidation (2025-12-12)
+- [x] Fixed HyperArc field naming validation (180.1→181, 179.9→179 mapping) (2025-12-12)
+- [x] Fixed PTV-Body proximity to show all PTVs within threshold (2025-12-12)
+- [x] Removed TEST_ prefix from assembly names (v1.7.0, 2025-12-12)
 
 ---
 
@@ -117,7 +122,7 @@ See [ROADMAP.md](./ROADMAP.md) for full strategic plan.
 - **ValidationResult:** Contains message, severity (Error/Warning/Info), and category
 
 ### ESAPI Integration
-- Plugin DLL: `TEST_Cross_Check.esapi.dll`
+- Plugin DLL: `Cross_Check.esapi.dll`
 - Requires x64 platform targeting
 - Accessed via Eclipse Script menu
 - Works with ScriptContext providing access to plan data

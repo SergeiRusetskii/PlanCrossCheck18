@@ -29,7 +29,7 @@ msbuild PlanCrossCheck.sln /p:Configuration=Debug /p:Platform=x64
 msbuild PlanCrossCheck.sln /t:Clean
 ```
 
-The output is an ESAPI plugin file: `TEST_Cross_Check.esapi.dll` in the `Release/` or `bin/` directory.
+The output is an ESAPI plugin file: `Cross_Check.esapi.dll` in the `Release/` or `bin/` directory.
 
 ## Architecture
 
@@ -69,5 +69,5 @@ The validation system uses a composite pattern where:
 
 ## Version Management
 
-Current version: v1.6.0 (as shown in Script.cs window title)
+Current version: v1.7.0 (as shown in Script.cs window title)
 Versioned releases are stored in directories like "Script V1.0", "Script V1.2", etc.

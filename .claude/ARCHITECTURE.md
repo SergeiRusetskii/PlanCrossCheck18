@@ -46,7 +46,8 @@ PlanCrossCheck/
 │   ├── SetupFieldsValidator.cs     # Setup field configuration
 │   ├── OptimizationValidator.cs    # Jaw tracking, ASC validation
 │   ├── ReferencePointValidator.cs  # Reference point & prescription validation
-│   ├── FixationValidator.cs        # Fixation devices & collision checks
+│   ├── FixationValidator.cs        # Fixation device structures & density overrides
+│   ├── CollisionValidator.cs       # Gantry-fixation collision clearance checks
 │   ├── PlanningStructuresValidator.cs # Air structure validation
 │   └── PTVBodyProximityValidator.cs # PTV-to-Body distance checks
 │
@@ -77,7 +78,7 @@ PlanCrossCheck/
 │   └── Release 1.5.2 - z_Air sampling/
 │
 └── bin/Release/                    # Build output
-    └── TEST_Cross_Check.esapi.dll  # Plugin DLL for Eclipse
+    └── Cross_Check.esapi.dll  # Plugin DLL for Eclipse
 ```
 
 ---
@@ -103,7 +104,7 @@ PlanCrossCheck/
 **Purpose:** Composite pattern validation engine
 
 **Structure:**
-The validation system has been refactored into a modular directory structure for better maintainability. Previously contained in a single 2,230-line `Validators.cs` file, now organized into 20 separate files.
+The validation system has been refactored into a modular directory structure for better maintainability. Previously contained in a single 2,230-line `Validators.cs` file, now organized into 21 separate files.
 
 **Class Hierarchy:**
 ```
@@ -122,6 +123,7 @@ ValidatorBase (abstract)                    → Validators/Base/ValidatorBase.cs
 │   │       ├── OptimizationValidator       → Validators/OptimizationValidator.cs
 │   │       ├── ReferencePointValidator     → Validators/ReferencePointValidator.cs
 │   │       ├── FixationValidator           → Validators/FixationValidator.cs
+│   │       ├── CollisionValidator          → Validators/CollisionValidator.cs
 │   │       ├── PlanningStructuresValidator → Validators/PlanningStructuresValidator.cs
 │   │       └── PTVBodyProximityValidator   → Validators/PTVBodyProximityValidator.cs
 ```
@@ -372,7 +374,7 @@ msbuild PlanCrossCheck.sln /p:Configuration=Release /p:Platform=x64
 msbuild PlanCrossCheck.sln /p:Configuration=Debug /p:Platform=x64
 ```
 
-**Output:** `TEST_Cross_Check.esapi.dll`
+**Output:** `Cross_Check.esapi.dll`
 
 ### Deployment
 1. Build project → generates `.esapi.dll`
@@ -452,13 +454,13 @@ msbuild PlanCrossCheck.sln /p:Configuration=Debug /p:Platform=x64
 
 ### Installation
 1. Build solution in Release configuration
-2. Locate `TEST_Cross_Check.esapi.dll` in `bin/Release/`
+2. Locate `Cross_Check.esapi.dll` in `bin/Release/`
 3. Copy to Eclipse plugin directory (typically `C:\Program Files (x86)\Varian\Vision\<version>\ExternalBeam\Plugins\`)
 4. Restart Eclipse
 
 ### Execution
 - Open plan in Eclipse
-- Scripts menu → TEST_Cross_Check
+- Scripts menu → Cross_Check
 - Validation runs automatically
 - Results display in popup window
 

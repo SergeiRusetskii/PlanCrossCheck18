@@ -20,7 +20,7 @@ namespace PlanCrossCheck
                 string machineId = context.PlanSetup.Beams.First().TreatmentUnit.Id;
                 bool isEdgeMachine = PlanUtilities.IsEdgeMachine(machineId);
                 bool isSRSPlan = context.PlanSetup.Beams.Any(b =>
-                    !b.IsSetupField && PlanUtilities.ContainsSRS(b.Technique.ToString()));
+                    !b.IsSetupField && PlanUtilities.ContainsSRS(b));
 
                 if (isEdgeMachine)
                 {

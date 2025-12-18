@@ -100,7 +100,8 @@ namespace PlanCrossCheck
                                 "Fields.Energy",
                                 $"Field '{beam.Id}': {beam.EnergyModeDisplayName}",
                                 ValidationSeverity.Info,
-                                isFieldResult: true
+                                isFieldResult: true,
+                                allPassSummary: $"All treatment fields use consistent energy configuration"
                             ));
                         }
                     }

@@ -7,7 +7,7 @@
 
 ## Current State
 
-**Version:** v1.7.2 (TEST_)
+**Version:** v1.7.3 (TEST_)
 **Status:** Active development - Quality assurance validation tool
 **Branch:** main
 
@@ -90,7 +90,8 @@ PlanCrossCheck/
 - [x] Implemented ContrastStructureValidator - checks for z_Contrast* when Study.Comment contains CONTRAST (2025-12-18)
 - [x] Skip marker detection for Edge machine with Encompass fixation (2025-12-18)
 - [x] Changed marker detection threshold from 2000HU to 500HU (2025-12-18)
-- [x] Updated ReferencePointValidator to always show all dose checks (passes + errors) (2025-12-18)
+- [x] Enhanced allPass summary messages with custom descriptions (2025-12-18)
+- [x] Reverted ReferencePointValidator to combined message logic (2025-12-18)
 
 ---
 

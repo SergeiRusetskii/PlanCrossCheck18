@@ -12,14 +12,15 @@ namespace PlanCrossCheck
     {
         public abstract IEnumerable<ValidationResult> Validate(ScriptContext context);
 
-        protected ValidationResult CreateResult(string category, string message, ValidationSeverity severity, bool isFieldResult = false)
+        protected ValidationResult CreateResult(string category, string message, ValidationSeverity severity, bool isFieldResult = false, string allPassSummary = null)
         {
             return new ValidationResult
             {
                 Category = category,
                 Message = message,
                 Severity = severity,
-                IsFieldResult = isFieldResult
+                IsFieldResult = isFieldResult,
+                AllPassSummary = allPassSummary
             };
         }
     }

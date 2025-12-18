@@ -155,6 +155,7 @@ namespace PlanCrossCheck
                         string toleranceTable = beam.ToleranceTableLabel;
                         string expectedTable = PlanUtilities.IsHalcyonMachine(machineId) ? "HAL" : "EDGE";
                         bool isValid = toleranceTable == expectedTable;
+                        string summary = $"All treatment fields have correct tolerance table ({expectedTable})";
 
                         results.Add(CreateResult(
                             "Fields.Geometry.ToleranceTable",
@@ -162,7 +163,8 @@ namespace PlanCrossCheck
                                    : $"Field '{beam.Id}' has incorrect tolerance table. " +
                                    $"Expected: {expectedTable}, Found: {toleranceTable}",
                             isValid ? ValidationSeverity.Info : ValidationSeverity.Warning,
-                            true
+                            true,
+                            summary
                         ));
                     }
                 }

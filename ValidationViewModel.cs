@@ -29,13 +29,17 @@ namespace PlanCrossCheck
 
                     if (allPass && allFieldResults && hasMultipleResults)
                     {
+                        // Use custom AllPassSummary if provided, otherwise use generic message
+                        string summaryMessage = groupList.FirstOrDefault()?.AllPassSummary
+                            ?? $"All treatment fields passed {group.Key} checks";
+
                         return new[]
                         {
                             new ValidationResult
                             {
                                 Category = group.Key,
                                 Severity = ValidationSeverity.Info,
-                                Message = $"All treatment fields passed {group.Key} checks"
+                                Message = summaryMessage
                             }
                         };
                     }

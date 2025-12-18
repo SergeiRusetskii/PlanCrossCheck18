@@ -57,7 +57,7 @@ namespace PlanCrossCheck
                     {
                         results.Add(CreateResult(
                             "Structure.Contrast",
-                            "Study comment contains 'CONTRAST' but z_Contrast* structure is missing. Consider adding contrast structure for accurate dose calculation.",
+                            "Study comment contains 'CONTRAST' but z_Contrast* structure is missing. \nConsider adding z_Contrast structure if needed.",
                             ValidationSeverity.Warning
                         ));
                     }

@@ -48,31 +48,48 @@ namespace PlanCrossCheck
                 bool isDailyDoseValid = Math.Abs(actualDailyDose - expectedDailyDose) <= 0.09;
                 bool isSessionDoseValid = Math.Abs(actualSessionDose - expectedDailyDose) <= 0.09;
 
-                // Always show all dose validation results (both passes and errors)
-                results.Add(CreateResult(
-                    "Dose.ReferencePoint",
-                    isTotalDoseValid
-                        ? $"Total reference point dose is correct ({actualTotalDose:F2} Gy)"
-                        : $"Total reference point dose ({actualTotalDose:F2} Gy) is incorrect: Total+0.1={expectedTotalDose:F2} Gy",
-                    isTotalDoseValid ? ValidationSeverity.Info : ValidationSeverity.Error
-                ));
+                // If all doses are correct, show single combined message
+                if (isTotalDoseValid && isDailyDoseValid && isSessionDoseValid)
+                {
+                    results.Add(CreateResult(
+                        "Dose.ReferencePoint",
+                        $"Total, Daily and Session reference point doses are correct ({actualTotalDose:F2}, {actualDailyDose:F2}, {actualSessionDose:F2} Gy)",
+                        ValidationSeverity.Info
+                    ));
+                }
+                else
+                {
+                    // Show individual error messages for failed doses
+                    if (!isTotalDoseValid)
+                    {
+                        results.Add(CreateResult(
+                            "Dose.ReferencePoint",
+                            $"Total reference point dose ({actualTotalDose:F2} Gy) " +
+                            $"is incorrect: Total+0.1={expectedTotalDose:F2} Gy",
+                            ValidationSeverity.Error
+                        ));
+                    }
 
-                results.Add(CreateResult(
-                    "Dose.ReferencePoint",
-                    isDailyDoseValid
-                        ? $"Daily reference point dose is correct ({actualDailyDose:F2} Gy)"
-                        : $"Daily reference point dose ({actualDailyDose:F2} Gy) is incorrect: Fraction+0.1={expectedDailyDose:F2} Gy",
-                    isDailyDoseValid ? ValidationSeverity.Info : ValidationSeverity.Error
-                ));
+                    if (!isDailyDoseValid)
+                    {
+                        results.Add(CreateResult(
+                            "Dose.ReferencePoint",
+                            $"Daily reference point dose ({actualDailyDose:F2} Gy) " +
+                            $"is incorrect: Fraction+0.1=({expectedDailyDose:F2} Gy)",
+                            ValidationSeverity.Error
+                        ));
+                    }
 
-                results.Add(CreateResult(
-                    "Dose.ReferencePoint",
-                    isSessionDoseValid
-                        ? $"Session reference point dose is correct ({actualSessionDose:F2} Gy)"
-                        : $"Session reference point dose ({actualSessionDose:F2} Gy) is incorrect: Fraction+0.1={expectedDailyDose:F2} Gy",
-                    isSessionDoseValid ? ValidationSeverity.Info : ValidationSeverity.Error
-                ));
-
+                    if (!isSessionDoseValid)
+                    {
+                        results.Add(CreateResult(
+                            "Dose.ReferencePoint",
+                            $"Session reference point dose ({actualSessionDose:F2} Gy) " +
+                            $"is incorrect: Fraction+0.1=({expectedDailyDose:F2} Gy)",
+                            ValidationSeverity.Error
+                        ));
+                    }
+                }
 
                 // Check if prescription dose matches plan dose
                 if (context.PlanSetup?.RTPrescription != null)
@@ -99,22 +116,38 @@ namespace PlanCrossCheck
                         bool isTotalDoseMatch = Math.Abs(PrescriptionTotalDose - totalPrescribedDose) < 0.01;
                         bool isFractionDoseMatch = Math.Abs(PrescriptionFractionDose - dosePerFraction) < 0.01;
 
-                        // Always show all prescription validation results (both passes and errors)
-                        results.Add(CreateResult(
-                            "Dose.Prescription",
-                            isTotalDoseMatch
-                                ? $"Plan total dose matches prescription ({totalPrescribedDose:F2} Gy)"
-                                : $"Plan dose ({totalPrescribedDose:F2} Gy) does not match prescription dose ({PrescriptionTotalDose:F2} Gy)",
-                            isTotalDoseMatch ? ValidationSeverity.Info : ValidationSeverity.Error
-                        ));
+                        // If both doses match, show single combined message
+                        if (isTotalDoseMatch && isFractionDoseMatch)
+                        {
+                            results.Add(CreateResult(
+                                "Dose.Prescription",
+                                $"Plan total and fraction doses match prescription doses ({totalPrescribedDose:F2}, {dosePerFraction:F2} Gy)",
+                                ValidationSeverity.Info
+                            ));
+                        }
+                        else
+                        {
+                            // Show individual error messages
+                            if (!isTotalDoseMatch)
+                            {
+                                results.Add(CreateResult(
+                                    "Dose.Prescription",
+                                    $"Plan dose ({totalPrescribedDose:F2} Gy) " +
+                                    $"does not match prescription dose ({PrescriptionTotalDose:F2} Gy)",
+                                    ValidationSeverity.Error
+                                ));
+                            }
 
-                        results.Add(CreateResult(
-                            "Dose.Prescription",
-                            isFractionDoseMatch
-                                ? $"Plan fraction dose matches prescription ({dosePerFraction:F2} Gy)"
-                                : $"Plan fraction dose ({dosePerFraction:F2} Gy) does not match prescription dose per fraction ({PrescriptionFractionDose:F2} Gy)",
-                            isFractionDoseMatch ? ValidationSeverity.Info : ValidationSeverity.Error
-                        ));
+                            if (!isFractionDoseMatch)
+                            {
+                                results.Add(CreateResult(
+                                    "Dose.Prescription",
+                                    $"Plan fraction dose ({dosePerFraction:F2} Gy) " +
+                                    $"does not match prescription dose per fraction ({PrescriptionFractionDose:F2} Gy)",
+                                    ValidationSeverity.Error
+                                ));
+                            }
+                        }
                     }
                     else
                     {

@@ -132,6 +132,7 @@ echo '{"status": "clean", "timestamp": "'$(date -Iseconds)'"}' > .claude/.last_s
 2. **Privacy by Default** — dialogs private in .gitignore
 3. **Local Processing** — no external APIs
 4. **Token Economy** — minimal context loading
+5. **Always Clarify Ambiguity** — when user requests are ambiguous or unclear, ALWAYS ask clarifying questions instead of guessing. Use AskUserQuestion tool to get specific details.
 
 ## Token Economy Rules
 
@@ -148,12 +149,67 @@ echo '{"status": "clean", "timestamp": "'$(date -Iseconds)'"}' > .claude/.last_s
 
 **Why:** Framework files are curated, comprehensive, and token-efficient. Random project searches waste tokens.
 
+## Version Management Rules
+
+**CRITICAL: Eclipse Version Requirement**
+
+Eclipse blocks launching scripts if they are changed without a version update. Follow these rules strictly:
+
+### Auto-Version Bump Protocol
+
+**WHEN to bump version:**
+- User provides feedback from script launch in Eclipse (runtime errors, validation issues, UI problems)
+- User reports issues from actual Eclipse execution
+- Any code changes followed by "test this in Eclipse" feedback
+
+**WHEN NOT to bump version:**
+- User reports build errors (msbuild compilation errors)
+- User reports syntax errors before build
+- Pure code review or refactoring without Eclipse testing
+- Documentation-only changes
+
+### Version Files to Update
+
+When bumping version, update BOTH files simultaneously:
+
+1. **Properties/AssemblyInfo.cs** (lines 32-33):
+```csharp
+[assembly: AssemblyVersion("1.7.X")]
+[assembly: AssemblyFileVersion("1.7.X")]
+```
+
+2. **Script.cs** (line 35):
+```csharp
+window.Title = "TEST_Cross-check v1.7.X";  // or "Cross-check v1.7.X" for production
+```
+
+**Version Format:** Use semantic versioning: `major.minor.patch`
+- Patch version (X) increments for bug fixes and small changes
+- Minor version increments for new features
+- Major version increments for breaking changes
+
+### Example Workflow
+
+```
+User: "I tested v1.7.1 in Eclipse and it crashes when opening"
+→ Bump to v1.7.2, fix bug, update both files
+
+User: "Build failed with error CS1002"
+→ DO NOT bump version, fix syntax error only
+
+User: "v1.7.2 works but validation message is unclear"
+→ Bump to v1.7.3, improve message, update both files
+```
+
+---
+
 ## Warnings
 
 - DO NOT skip Crash Recovery check
 - DO NOT commit without updating metafiles
 - ALWAYS mark session clean at completion
 - DO NOT search project files before reading framework files
+- ALWAYS bump version when user provides Eclipse runtime feedback (unless build errors)
 
 ---
 

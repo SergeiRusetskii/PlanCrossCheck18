@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PlanCrossCheck</RootNamespace>
-    <AssemblyName>Cross_Check.esapi</AssemblyName>
+    <AssemblyName>TEST_Cross_Check.esapi</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -107,6 +107,8 @@
     <Compile Include="Validators\CollisionValidator.cs" />
     <Compile Include="Validators\PlanningStructuresValidator.cs" />
     <Compile Include="Validators\PTVBodyProximityValidator.cs" />
+    <Compile Include="Validators\BeamEnergyValidator.cs" />
+    <Compile Include="Validators\ContrastStructureValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainControl.xaml">

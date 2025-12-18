@@ -68,18 +68,8 @@ namespace PlanCrossCheck
 
                     if (isEdgeMachine && context.PlanSetup.DosePerFraction.Dose >= 5)
                     {
-                        // Energy validation for Edge machine with high dose/fraction
-                        bool isValidEnergy = energy == "6X-FFF" || energy == "10X-FFF";
-                        results.Add(CreateResult(
-                            "Dose.Energy",
-                            isValidEnergy
-                                ? $"Field '{beam.Id}' correctly uses FFF energy ({energy}) for dose/fraction ≥5Gy"
-                                : $"Field '{beam.Id}' should use 6FFF or 10FFF energy for dose/fraction ≥5Gy, " +
-                                $"found: {energy}",
-                            isValidEnergy ? ValidationSeverity.Info : ValidationSeverity.Error,
-                            true
-                        ));
-
+                        // Dose rate expectations for Edge machine with high dose/fraction
+                        // (Energy validation moved to BeamEnergyValidator)
                         if (energy == "6X-FFF") expectedDoseRate = 1400;
                         else if (energy == "10X-FFF") expectedDoseRate = 2400;
                         else if (energy == "6X" || energy == "10X") expectedDoseRate = 600;

@@ -473,6 +473,8 @@ Test with:
 
 ### DO ✅
 
+- **Always use ESAPI reference libraries (.xml)** - Check `/Documentation/VMS.TPS.Common.Model.API.xml` and `/Documentation/VMS.TPS.Common.Model.Types.xml` for available methods, properties, and types
+- **Check for existing helper methods** - Before creating new utility methods, check if one already exists in `PlanUtilities.cs` (e.g., `IsHyperArc()`, `IsSRS()`, `IsEdgeMachine()`, `IsArcBeam()`)
 - **Always null-check** before ESAPI access
 - **Use clear, actionable messages** - tell user what to fix
 - **Choose appropriate severity** - don't cry wolf with errors
@@ -571,6 +573,92 @@ bin/Release/Cross_Check.esapi.dll
 2. **Check ESAPI docs** - XML files in /Documentation
 3. **Use Context7 MCP** - For ESAPI code examples
 4. **Test incrementally** - Build and test each step
+
+---
+
+## Managing TEST_ Prefix
+
+### Purpose
+
+The TEST_ prefix is used to identify development/testing versions of the plugin in Eclipse. This prevents confusion between production and test versions.
+
+### Files to Update
+
+When adding or removing the TEST_ prefix, update these files:
+
+#### 1. PlanCrossCheck.csproj
+**Location:** Line 11
+```xml
+<AssemblyName>TEST_Cross_Check.esapi</AssemblyName>
+```
+**Remove prefix:**
+```xml
+<AssemblyName>Cross_Check.esapi</AssemblyName>
+```
+
+#### 2. Properties/AssemblyInfo.cs
+**Location:** Lines 8 and 12
+```csharp
+[assembly: AssemblyTitle("TEST_Cross Check")]
+[assembly: AssemblyProduct("TEST_Cross_Check")]
+```
+**Remove prefix:**
+```csharp
+[assembly: AssemblyTitle("Cross Check")]
+[assembly: AssemblyProduct("Cross_Check")]
+```
+
+#### 3. Script.cs
+**Location:** Line 35 (window title)
+```csharp
+window.Title = "TEST_Cross-check v1.7.1";
+```
+**Remove prefix:**
+```csharp
+window.Title = "Cross-check v1.7.1";
+```
+
+### Workflow
+
+**Development/Testing:**
+- Use TEST_ prefix during development
+- Build generates: `TEST_Cross_Check.esapi.dll`
+- Eclipse shows: "TEST_Cross-check v1.7.1" in window title
+- Clearly distinguishable from production version
+
+**Production Release:**
+- Remove TEST_ prefix from all 3 locations
+- Update version number in AssemblyInfo.cs and Script.cs
+- Build generates: `Cross_Check.esapi.dll`
+- Eclipse shows: "Cross-check v1.7.1" in window title
+
+### Quick Commands
+
+**Add TEST_ prefix:**
+```bash
+# PlanCrossCheck.csproj line 11
+<AssemblyName>TEST_Cross_Check.esapi</AssemblyName>
+
+# Properties/AssemblyInfo.cs lines 8, 12
+[assembly: AssemblyTitle("TEST_Cross Check")]
+[assembly: AssemblyProduct("TEST_Cross_Check")]
+
+# Script.cs line 35
+window.Title = "TEST_Cross-check v1.7.1";
+```
+
+**Remove TEST_ prefix:**
+```bash
+# PlanCrossCheck.csproj line 11
+<AssemblyName>Cross_Check.esapi</AssemblyName>
+
+# Properties/AssemblyInfo.cs lines 8, 12
+[assembly: AssemblyTitle("Cross Check")]
+[assembly: AssemblyProduct("Cross_Check")]
+
+# Script.cs line 35
+window.Title = "Cross-check v1.7.1";
+```
 
 ---
 

@@ -7,7 +7,7 @@
 
 ## Current State
 
-**Version:** v1.7.0
+**Version:** v1.7.1 (TEST_)
 **Status:** Active development - Quality assurance validation tool
 **Branch:** main
 
@@ -77,6 +77,20 @@ PlanCrossCheck/
 - [x] Fixed HyperArc field naming validation (180.1→181, 179.9→179 mapping) (2025-12-12)
 - [x] Fixed PTV-Body proximity to show all PTVs within threshold (2025-12-12)
 - [x] Removed TEST_ prefix from assembly names (v1.7.0, 2025-12-12)
+- [x] Re-added TEST_ prefix for development (v1.7.1, 2025-12-18)
+- [x] Added auto-version-bump rules to CLAUDE.md (2025-12-18)
+- [x] Added TEST_ prefix management guide to DEVELOPER_GUIDE.md (2025-12-18)
+- [x] Removed obsolete CLAUDE_project.md and FRAMEWORK_GUIDE.md (2025-12-18)
+- [x] Added ESAPI reference guidelines to DEVELOPER_GUIDE.md (2025-12-18)
+- [x] Implemented BeamEnergyValidator - checks all treatment fields use same energy (2025-12-18)
+- [x] Enhanced FixationValidator for Edge machine - accepts Alta/Couch OR Encompass fixation (2025-12-18)
+- [x] Added "Always Clarify Ambiguity" principle to CLAUDE.md (2025-12-18)
+- [x] Merged Dose.Energy and Field Energy into Fields.Energy category (2025-12-18)
+- [x] Moved Edge high-dose FFF energy check to BeamEnergyValidator (2025-12-18)
+- [x] Implemented ContrastStructureValidator - checks for z_Contrast* when Study.Comment contains CONTRAST (2025-12-18)
+- [x] Skip marker detection for Edge machine with Encompass fixation (2025-12-18)
+- [x] Changed marker detection threshold from 2000HU to 500HU (2025-12-18)
+- [x] Updated ReferencePointValidator to always show all dose checks (passes + errors) (2025-12-18)
 
 ---
 

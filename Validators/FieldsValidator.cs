@@ -15,6 +15,7 @@ namespace PlanCrossCheck
             AddValidator(new FieldNamesValidator());
             AddValidator(new GeometryValidator());
             AddValidator(new SetupFieldsValidator());
+            AddValidator(new BeamEnergyValidator());
         }
     }
 }

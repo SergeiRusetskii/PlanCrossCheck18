@@ -32,7 +32,7 @@ namespace VMS.TPS
             };
 
             window.Content = mainControl;
-            window.Title = "Cross-check v1.7.0";
+            window.Title = "TEST_Cross-check v1.7.1";
             window.Width = 650;
             window.Height = 1000;
         }

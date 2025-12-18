@@ -11,7 +11,7 @@ namespace PlanCrossCheck
     public class UserOriginMarkerValidator : ValidatorBase
     {
         // Configuration constants
-        private const double THRESHOLD_HU = 2000.0;
+        private const double THRESHOLD_HU = 500.0;  // Changed from 2000 to 500
         private const double RADIUS_MM = 5.0;
 
         public override IEnumerable<ValidationResult> Validate(ScriptContext context)
@@ -30,6 +30,25 @@ namespace PlanCrossCheck
             {
                 // Skip marker detection for HyperArc plans
                 return results;
+            }
+
+            // Skip marker detection for Edge machine with Encompass fixation
+            bool isEdgeMachine = context.PlanSetup.Beams.Any() &&
+                PlanUtilities.IsEdgeMachine(context.PlanSetup.Beams.First().TreatmentUnit.Id);
+
+            if (isEdgeMachine && context.StructureSet != null)
+            {
+                // Check if Encompass fixation is used (Option B for Edge)
+                var optionBStructures = new[] { "Encompass", "Encompass Base" };
+                bool hasEncompassFixation = optionBStructures.All(structName =>
+                    context.StructureSet.Structures.Any(s =>
+                        s.Id.Equals(structName, StringComparison.OrdinalIgnoreCase)));
+
+                if (hasEncompassFixation)
+                {
+                    // Skip marker detection for Edge machine with Encompass fixation
+                    return results;
+                }
             }
 
             var image = context.StructureSet.Image;

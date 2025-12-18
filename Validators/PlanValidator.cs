@@ -21,6 +21,7 @@ namespace PlanCrossCheck
             AddValidator(new CollisionValidator());
             AddValidator(new OptimizationValidator());
             AddValidator(new PlanningStructuresValidator());
+            AddValidator(new ContrastStructureValidator());
             AddValidator(new PTVBodyProximityValidator());
         }
 

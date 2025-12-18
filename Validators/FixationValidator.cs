@@ -20,6 +20,7 @@ namespace PlanCrossCheck
             {
                 string machineId = context.PlanSetup?.Beams?.FirstOrDefault()?.TreatmentUnit.Id;
                 bool isHalcyonMachine = PlanUtilities.IsHalcyonMachine(machineId);
+                bool isEdgeMachine = PlanUtilities.IsEdgeMachine(machineId);
 
                 // Required structures for Halcyon plans
                 if (isHalcyonMachine)
@@ -56,6 +57,48 @@ namespace PlanCrossCheck
                                 structureExists ? ValidationSeverity.Info : ValidationSeverity.Error
                             ));
                         }
+                    }
+                }
+
+                // Required structures for Edge plans - Option A OR Option B
+                if (isEdgeMachine)
+                {
+                    // Option A: Same as Halcyon fixation list
+                    var optionAPrefixes = new[]
+                    {
+                        "z_AltaHD_", "z_AltaLD_",
+                        "CouchSurface", "CouchInterior"
+                    };
+
+                    // Option B: Encompass fixation
+                    var optionBStructures = new[] { "Encompass", "Encompass Base" };
+
+                    // Check if Option A exists (all required)
+                    bool hasOptionA = optionAPrefixes.All(prefix =>
+                        context.StructureSet.Structures.Any(s =>
+                            s.Id.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)));
+
+                    // Check if Option B exists (both required)
+                    bool hasOptionB = optionBStructures.All(structName =>
+                        context.StructureSet.Structures.Any(s =>
+                            s.Id.Equals(structName, StringComparison.OrdinalIgnoreCase)));
+
+                    if (hasOptionA || hasOptionB)
+                    {
+                        string fixationType = hasOptionA ? "Alta/Couch fixation" : "Encompass fixation";
+                        results.Add(CreateResult(
+                            "Fixation.Structures",
+                            $"Edge machine: Required fixation structures exist ({fixationType})",
+                            ValidationSeverity.Info
+                        ));
+                    }
+                    else
+                    {
+                        results.Add(CreateResult(
+                            "Fixation.Structures",
+                            "Edge machine requires EITHER (z_AltaHD_*, z_AltaLD_*, CouchSurface*, CouchInterior*) OR (Encompass, Encompass Base). Neither set found.",
+                            ValidationSeverity.Error
+                        ));
                     }
                 }
 

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TEST_Cross Check")]
+[assembly: AssemblyTitle("Cross Check")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("rss Inc.")]
-[assembly: AssemblyProduct("TEST_Cross_Check")]
+[assembly: AssemblyProduct("Cross_Check")]
 [assembly: AssemblyCopyright("Copyright ©  2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.7.3")]
-[assembly: AssemblyFileVersion("1.7.3")]
+[assembly: AssemblyVersion("1.8.0")]
+[assembly: AssemblyFileVersion("1.8.0")]

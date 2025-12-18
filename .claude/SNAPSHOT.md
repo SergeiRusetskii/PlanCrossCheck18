@@ -7,8 +7,8 @@
 
 ## Current State
 
-**Version:** v1.7.3 (TEST_)
-**Status:** Active development - Quality assurance validation tool
+**Version:** v1.8.0
+**Status:** Production - Quality assurance validation tool
 **Branch:** main
 
 ---
@@ -92,6 +92,7 @@ PlanCrossCheck/
 - [x] Changed marker detection threshold from 2000HU to 500HU (2025-12-18)
 - [x] Enhanced allPass summary messages with custom descriptions (2025-12-18)
 - [x] Reverted ReferencePointValidator to combined message logic (2025-12-18)
+- [x] **Release v1.8.0: Removed TEST_ prefix - Production ready** (2025-12-18)
 
 ---
 

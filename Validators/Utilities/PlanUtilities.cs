@@ -44,6 +44,20 @@ namespace PlanCrossCheck
 
         /// <summary>
         /// Calculate the angular span (in degrees) covered by an arc beam.
+        ///
+        /// IMPORTANT PHYSICAL LIMITATION:
+        /// Eclipse TPS gantry CANNOT traverse through 180 degrees (IEC 61217).
+        /// This means arcs are limited to &lt;180° angular span.
+        ///
+        /// Examples of VALID arcs:
+        /// - 200° CW to 160° (spans 320° going 200→270→0→90→160)
+        /// - 10° CCW to 350° (spans 20° going 10→0→350)
+        /// - 90° CW to 270° (spans 180° going 90→180→270) - EDGE CASE, technically valid
+        ///
+        /// Examples of INVALID arcs (physically impossible):
+        /// - 200° CCW to 160° (would require going backward through 180°)
+        /// - 160° CW to 200° (would require going forward through 180°)
+        /// - Any arc requiring passage through exactly 180° in the travel direction
         /// </summary>
         public static double GetArcSpanDegrees(Beam beam)
         {
@@ -101,6 +115,9 @@ namespace PlanCrossCheck
         /// Returns normalized (startAngle, endAngle) pairs where start <= end.
         /// Wraparound sectors are split into multiple non-wrapping sectors.
         /// Optional margins allow expanding coverage for collision checks.
+        ///
+        /// OPTIMIZATION: If arc span + margins >= 360°, returns full 360° coverage.
+        /// 180° CLAMPING: Margins are clamped to 180° to respect gantry physical limitation.
         /// </summary>
         public static List<(double start, double end)> GetCoveredAngularSectors(
             IEnumerable<Beam> treatmentBeams,
@@ -133,12 +150,32 @@ namespace PlanCrossCheck
                 }
                 else
                 {
+                    // Arc beam - check if span + margins covers full 360°
+                    double arcSpan = GetArcSpanDegrees(beam);
+                    double totalCoverage = arcSpan + (2 * arcMarginDegrees); // margin on both sides
+
+                    if (totalCoverage >= 360)
+                    {
+                        // Optimization: full arc coverage, return complete circle
+                        return new List<(double start, double end)> { (0, 360) };
+                    }
+
                     // Arc: respect gantry direction when building sectors
                     // Apply margin on both ends along travel direction
                     if (beam.GantryDirection == GantryDirection.Clockwise)
                     {
-                        double cwStart = (startAngle - arcMarginDegrees + 360) % 360;
-                        double cwEnd = (endAngle + arcMarginDegrees + 360) % 360;
+                        double cwStart = startAngle - arcMarginDegrees;
+                        double cwEnd = endAngle + arcMarginDegrees;
+
+                        // Apply 180° clamping (gantry cannot traverse through 180°)
+                        if (startAngle >= 180 && cwStart < 180)
+                            cwStart = 180;
+                        if (endAngle < 180 && cwEnd > 180)
+                            cwEnd = 180;
+
+                        // Normalize to [0, 360)
+                        cwStart = (cwStart + 360) % 360;
+                        cwEnd = (cwEnd + 360) % 360;
 
                         bool wraps = startAngle > endAngle || cwStart > cwEnd;
                         if (wraps)
@@ -154,8 +191,18 @@ namespace PlanCrossCheck
                     }
                     else // CounterClockwise
                     {
-                        double ccwStart = (startAngle + arcMarginDegrees + 360) % 360;
-                        double ccwEnd = (endAngle - arcMarginDegrees + 360) % 360;
+                        double ccwStart = startAngle + arcMarginDegrees;
+                        double ccwEnd = endAngle - arcMarginDegrees;
+
+                        // Apply 180° clamping (gantry cannot traverse through 180°)
+                        if (startAngle < 180 && ccwStart > 180)
+                            ccwStart = 180;
+                        if (endAngle >= 180 && ccwEnd < 180)
+                            ccwEnd = 180;
+
+                        // Normalize to [0, 360)
+                        ccwStart = (ccwStart + 360) % 360;
+                        ccwEnd = (ccwEnd + 360) % 360;
 
                         bool wraps = startAngle < endAngle || ccwEnd > ccwStart;
                         if (wraps)

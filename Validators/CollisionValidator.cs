@@ -161,16 +161,16 @@ namespace PlanCrossCheck
 
         /// <summary>
         /// Validates collision risk for Edge machines.
-        /// Checks distance from isocenter only within treated gantry angles (±10 deg margin).
+        /// Checks maximum distance from isocenter across full 360° (all gantry angles).
         /// Skips check if couch rotation is present (requires manual verification).
-        /// Thresholds: &gt;37 cm = Warning, &gt;38 cm = Error
+        /// Thresholds: &gt;36.5 cm = Warning, &gt;37.5 cm = Error
         /// </summary>
         private IEnumerable<ValidationResult> ValidateEdgeCollision(ScriptContext context)
         {
             var results = new List<ValidationResult>();
             var allBeams = context.PlanSetup.Beams.ToList();
 
-            // Skip if couch rotation present
+            // Skip if couch rotation present (includes HyperArc plans)
             if (PlanUtilities.HasAnyFieldWithCouch(allBeams))
             {
                 results.Add(CreateResult(
@@ -183,20 +183,9 @@ namespace PlanCrossCheck
 
             VVector isocenter = context.PlanSetup.Beams.First().IsocenterPosition;
 
-            // Edge thresholds: >37 cm from iso -> warning, >38 cm -> error.
-            // Evaluate only within treated gantry angles, expanded by +/-10 degrees
-            // (applies to both arc sweeps and static fields).
-            const double arcMarginDegrees = 10.0;
-            const double staticMarginDegrees = 10.0;
-            var ringRadius = 380.0; // 38 cm in mm
-
-            var treatmentBeams = context.PlanSetup.Beams.Where(b => !b.IsSetupField).ToList();
-
-            var coveredSectors = PlanUtilities.GetCoveredAngularSectors(
-                treatmentBeams,
-                arcMarginDegrees: arcMarginDegrees,
-                staticMarginDegrees: staticMarginDegrees);
-            bool hasCoverageFilter = coveredSectors?.Any() == true;
+            // Edge thresholds: >36.5 cm from iso -> warning, >37.5 cm -> error.
+            // Check full 360° coverage for maximum safety (conservative approach).
+            var ringRadius = 375.0; // 37.5 cm in mm (error threshold)
 
             var structureDetails = new List<(Structure Structure, double MaxDistance, VVector FurthestPoint, double Clearance, double DistanceCm)>();
 
@@ -224,18 +213,7 @@ namespace PlanCrossCheck
                                     Math.Pow(point.x - isocenter.x, 2) +
                                     Math.Pow(point.y - isocenter.y, 2));
 
-                                // Angular filtering: only check points within treated sectors
-                                if (hasCoverageFilter)
-                                {
-                                    double angleRad = Math.Atan2(point.y - isocenter.y, point.x - isocenter.x);
-                                    double angleDeg = angleRad * 180.0 / Math.PI;
-                                    if (angleDeg < 0)
-                                        angleDeg += 360;
-
-                                    if (!PlanUtilities.IsAngleInSectors(angleDeg, coveredSectors))
-                                        continue; // Skip points outside treated angles
-                                }
-
+                                // Check all points (full 360° coverage)
                                 if (radialDistance > maxRadialDistance)
                                 {
                                     maxRadialDistance = radialDistance;
@@ -280,16 +258,16 @@ namespace PlanCrossCheck
 
                 // Determine severity
                 ValidationSeverity severity = ValidationSeverity.Info;
-                if (maxDistanceCm > 38.0)
+                if (maxDistanceCm > 37.5)
                     severity = ValidationSeverity.Error;
-                else if (maxDistanceCm > 37.0)
+                else if (maxDistanceCm > 36.5)
                     severity = ValidationSeverity.Warning;
 
                 string message = $"Max distance {maxDistanceCm:F1} cm from isocenter to " +
-                    $"fixation device '{structure.Id}' ({direction} edge) \nwithin treated gantry angles (+/-10 deg)";
-                if (maxDistanceCm > 38.0)
+                    $"fixation device '{structure.Id}' ({direction} edge)";
+                if (maxDistanceCm > 37.5)
                     message += " - potential collision risk";
-                else if (maxDistanceCm > 37.0)
+                else if (maxDistanceCm > 36.5)
                     message += " - limited clearance";
 
                 results.Add(CreateResult(

@@ -118,9 +118,9 @@ PlanCrossCheck includes **18 specialized validators** organized into the followi
 
 1. Copy `Cross_Check.esapi.dll` to your Eclipse plugin directory:
    ```
-   C:\Program Files (x86)\Varian\Vision\[version]\ExternalBeam\Plugins\
+   C:\Program Files\Varian\Vision\[version]\ExternalBeam\Plugins\
    ```
-   (Exact path may vary based on Eclipse version and installation location)
+   **Note**: Modern x64 Eclipse installations typically use `Program Files` (not `Program Files (x86)`). Exact path may vary based on Eclipse version and installation location.
 
 2. Restart Eclipse treatment planning system
 
@@ -337,6 +337,10 @@ This software is free for internal organizational use and non-profit purposes. C
 
 Copyright (c) 2025 Sergei Rusetskii
 
+## Security
+
+For reporting security vulnerabilities, please email **rusetskiy.s@gmail.com** with subject line "SECURITY: PlanCrossCheck". Please do not disclose security issues publicly until they have been addressed.
+
 ## Support
 
 For questions, bug reports, or feature requests:
@@ -356,7 +360,7 @@ Built using:
 
 This software is provided for research and educational purposes. Users are responsible for validating the tool's performance in their clinical environment and ensuring compliance with institutional policies and regulatory requirements.
 
-**Not FDA-cleared for clinical use. Use at your own risk.**
+**This software has not undergone FDA clearance. Users must validate performance in their clinical environment per institutional requirements.**
 
 ---
 

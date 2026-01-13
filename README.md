@@ -331,7 +331,9 @@ For major changes, please open an issue first to discuss the proposed modificati
 
 ## License
 
-MIT License - See [LICENSE](LICENSE) file for details.
+PlanCrossCheck Community License - See [LICENSE](LICENSE) file for details.
+
+This software is free for internal organizational use and non-profit purposes. Commercial use requires a separate license.
 
 Copyright (c) 2025 Sergei Rusetskii
 

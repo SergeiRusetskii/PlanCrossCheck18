@@ -1,21 +1,47 @@
-MIT License
+PlanCrossCheck Community License
 
 Copyright (c) 2025 Sergei Rusetskii
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+TERMS AND CONDITIONS
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. GRANT OF LICENSE
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Permission is hereby granted, free of charge, to any person or organization obtaining a copy of this software and associated documentation files (the "Software") to use, copy, modify, and redistribute the Software under the conditions below.
+
+2. PERMITTED USE
+
+- Internal use is permitted for any organization (including commercial clinics), with the right to modify for internal needs.
+- Non-profit SaaS/hosted use is permitted if offered free of charge with proper attribution to this repository.
+
+3. REDISTRIBUTION
+
+Redistribution of the Software (original or modified) is permitted only if ALL of the following are true:
+- No fee or other compensation is charged for the Software itself.
+- Attribution to "PlanCrossCheck" and a link to the original repository are included.
+- This license text and copyright notice are provided with the Software.
+
+4. PROHIBITED COMMERCIAL USE
+
+You may NOT:
+- Embed, incorporate, or bundle the Software (or derivatives) into any product or service offered for a fee or other commercial advantage.
+- Provide paid consulting deliverables that include the Software (original or modified) as a bundled component.
+- Offer the Software or derivatives as paid SaaS/hosted services.
+
+Commercial use outside these terms requires a separate commercial license from the copyright holder.
+
+5. NO TRADEMARK OR ENDORSEMENT RIGHTS
+
+This license does not grant any rights to use the PlanCrossCheck name, logos, or other trademarks, nor imply endorsement.
+
+6. NO WARRANTY
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+7. MEDICAL DISCLAIMER
+
+This tool is provided for quality assurance purposes in radiation therapy planning. Clinical decisions should always be made by qualified medical physics and radiation oncology professionals. This software does not replace professional clinical judgment or institutional quality assurance procedures.
+
+---
+
+For commercial licensing inquiries, please contact:
+Sergei Rusetskii - https://github.com/SergeiRusetskii

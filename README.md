@@ -2,6 +2,10 @@
 
 A comprehensive quality assurance tool for Varian Eclipse treatment planning systems that performs automated validation checks on radiation therapy treatment plans.
 
+> **⚠️ IMPORTANT MEDICAL DISCLAIMER**
+>
+> This tool is provided for quality assurance purposes in radiation therapy planning. **This software has not undergone FDA clearance.** Clinical decisions must always be made by qualified medical physics and radiation oncology professionals. This software does not replace professional clinical judgment or institutional quality assurance procedures. Users must validate performance in their clinical environment per institutional requirements.
+
 ## Overview
 
 PlanCrossCheck is an Eclipse Scripting API (ESAPI) plugin designed to systematically validate treatment plans to ensure quality and safety in radiation therapy. The tool performs extensive checks across multiple categories including plan parameters, dose calculations, beam configurations, machine-specific validations, and clinical protocols.
@@ -116,15 +120,11 @@ PlanCrossCheck includes **18 specialized validators** organized into the followi
 
 ### Deployment to Eclipse
 
-1. Copy `Cross_Check.esapi.dll` to your Eclipse plugin directory:
-   ```
-   C:\Program Files\Varian\Vision\[version]\ExternalBeam\Plugins\
-   ```
-   **Note**: Modern x64 Eclipse installations typically use `Program Files` (not `Program Files (x86)`). Exact path may vary based on Eclipse version and installation location.
+1. Copy `Cross_Check.esapi.dll` to your Eclipse plugin directory
 
-2. Restart Eclipse treatment planning system
+2. Restart Eclipse treatment planning system and approve plugin
 
-3. The plugin will appear in the **Scripts** menu as "Cross-check v1.8.3"
+3. The plugin will appear in the **Scripts** menu as "Cross-check"
 
 ## Usage
 
@@ -339,7 +339,12 @@ Copyright (c) 2025 Sergei Rusetskii
 
 ## Security
 
-For reporting security vulnerabilities, please email **rusetskiy.s@gmail.com** with subject line "SECURITY: PlanCrossCheck". Please do not disclose security issues publicly until they have been addressed.
+For reporting security vulnerabilities:
+
+- **Preferred**: Use [GitHub Security Advisories](https://github.com/SergeiRusetskii/PlanCrossCheck18/security/advisories/new) for private disclosure
+- **Alternative**: Email **rusetskiy.s@gmail.com** with subject line "SECURITY: PlanCrossCheck"
+
+Please do not disclose security issues publicly until they have been addressed.
 
 ## Support
 

@@ -92,6 +92,10 @@ PlanCrossCheck/
 - [x] Cleaned up old monolithic structure
 - [x] Updated ARCHITECTURE.md for multi-clinic pattern
 - [x] Added .DS_Store to .gitignore
+- [x] **Created variant-specific README files**
+- [x] Updated root README.md with high-level summary and variant comparison
+- [x] Created Variants/ClinicE/README.md (386 lines - Eclipse 18.0 docs)
+- [x] Created Variants/ClinicH/README.md (423 lines - Eclipse 16.1 docs)
 
 ### Previous Progress
 - [x] Implemented composite validator pattern architecture
@@ -129,7 +133,7 @@ PlanCrossCheck/
 - [ ] Build and test ClinicE variant in Eclipse 18.0
 - [ ] Build and test ClinicH variant in Eclipse 16.1
 - [ ] Verify all validators produce expected results
-- [ ] Update deployment documentation
+- [x] Update deployment documentation (completed in variant READMEs)
 
 See [BACKLOG.md](./BACKLOG.md) for detailed task list.
 
@@ -140,12 +144,12 @@ See [BACKLOG.md](./BACKLOG.md) for detailed task list.
 **Immediate:**
 - Build and test both variants
 - Verify deployment process
-- Update user documentation for variant selection
+- ~~Update user documentation for variant selection~~ ✓ Completed
 
 **Short-term:**
 - Add third clinic variant if needed
 - Enhance validator test coverage
-- Document variant-specific validation rules
+- ~~Document variant-specific validation rules~~ ✓ Completed
 
 **Long-term:**
 - User configuration system per variant (v2.0.0)

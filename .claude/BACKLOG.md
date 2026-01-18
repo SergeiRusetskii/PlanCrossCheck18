@@ -16,9 +16,11 @@
 - [ ] Verify all validators produce expected results
 
 ### Documentation
-- [ ] Update README.md with variant selection guide
-- [ ] Document deployment process for each variant
-- [ ] Update version management for variants
+- [x] Update README.md with variant selection guide
+- [x] Document deployment process for each variant
+- [x] Create Variants/ClinicE/README.md (detailed Eclipse 18.0 docs)
+- [x] Create Variants/ClinicH/README.md (detailed Eclipse 16.1 docs)
+- [ ] Update version management for variants (pending after testing)
 
 ---
 
@@ -65,6 +67,10 @@
 - [x] Updated ARCHITECTURE.md for multi-clinic pattern
 - [x] Updated SNAPSHOT.md with variant information
 - [x] Created MIGRATION_COMPLETE.md documentation
+- [x] **Created variant-specific README files**
+- [x] Updated root README.md with multi-clinic architecture overview
+- [x] Created Variants/ClinicE/README.md (386 lines - Eclipse 18.0 documentation)
+- [x] Created Variants/ClinicH/README.md (423 lines - Eclipse 16.1 documentation)
 
 ### Recently Completed
 - [x] Initialized Claude Code Starter Framework v2.1 (2025-12-10)

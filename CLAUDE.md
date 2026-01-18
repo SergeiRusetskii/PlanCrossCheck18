@@ -2,8 +2,10 @@
 
 **Build/Test Ownership:** The user handles all builds and Eclipse testing; do not run tests or builds locally—just note required steps for them.
 
-**Framework:** Claude Code Starter v2.1
+**Framework:** Claude Code Starter v2.5.1
 **Type:** Meta-framework extending Claude Code capabilities
+
+---
 
 ## Triggers
 
@@ -66,7 +68,7 @@ Read `.claude/SNAPSHOT.md` — current version, what's in progress
 ### Step 4: Confirm
 ```
 Context loaded. Directory: [pwd]
-Framework: Claude Code Starter v2.1
+Framework: Claude Code Starter v2.5.1
 Ready to work!
 ```
 
@@ -75,8 +77,9 @@ Ready to work!
 ## Completion Protocol
 
 ### 1. Build (if code changed)
+Note the build command for user:
 ```bash
-npm run build
+msbuild PlanCrossCheck.sln /p:Configuration=Release /p:Platform=x64
 ```
 
 ### 2. Update Metafiles
@@ -174,17 +177,17 @@ When bumping version, update BOTH files simultaneously:
 
 1. **Properties/AssemblyInfo.cs** (lines 32-33):
 ```csharp
-[assembly: AssemblyVersion("1.7.X")]
-[assembly: AssemblyFileVersion("1.7.X")]
+[assembly: AssemblyVersion("X.Y.Z")]
+[assembly: AssemblyFileVersion("X.Y.Z")]
 ```
 
 2. **Script.cs** (line 35):
 ```csharp
-window.Title = "TEST_Cross-check v1.7.X";  // or "Cross-check v1.7.X" for production
+window.Title = "TEST_Cross-check vX.Y.Z";  // or "Cross-check vX.Y.Z" for production
 ```
 
 **Version Format:** Use semantic versioning: `major.minor.patch`
-- Patch version (X) increments for bug fixes and small changes
+- Patch version increments for bug fixes and small changes
 - Minor version increments for new features
 - Major version increments for breaking changes
 
@@ -247,7 +250,7 @@ User: "v1.7.2 works but validation message is unclear"
 
 **Triggered when:** `.claude/migration-context.json` exists with `"mode": "upgrade"`
 
-**Purpose:** Migrate from old Framework version to v2.1.
+**Purpose:** Migrate from old Framework version to current.
 
 **Workflow:**
 
@@ -314,4 +317,4 @@ User: "v1.7.2 works but validation message is unclear"
    - Use normal Cold Start Protocol
 
 ---
-*Framework: Claude Code Starter v2.1*
+*Framework: Claude Code Starter v2.5.1*

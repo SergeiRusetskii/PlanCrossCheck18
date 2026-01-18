@@ -62,3 +62,8 @@ UpgradeLog*.htm
 
 # PowerShell scripts directory
 /PS/
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride

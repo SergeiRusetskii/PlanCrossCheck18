@@ -4,8 +4,17 @@ description: Sprint/Phase completion protocol
 
 # Completion Protocol
 
-Execute the Completion Protocol from `CLAUDE.md`:
+**CRITICAL: Read the protocol file fresh to avoid missing steps during long sessions.**
 
+## Step 0: Read Protocol File
+
+```
+Read .claude/protocols/completion.md
+```
+
+This file contains the complete Completion Protocol (immune to context compaction).
+
+Execute all steps from the protocol file:
 1. `npm run build` — verify build passes
 2. Update metafiles:
    - `.claude/BACKLOG.md` — mark completed tasks `[x]`

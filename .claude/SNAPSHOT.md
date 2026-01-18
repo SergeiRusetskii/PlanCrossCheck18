@@ -1,15 +1,16 @@
 # SNAPSHOT — PlanCrossCheck
 
-*Framework: Claude Code Starter v2.1*
-*Last updated: 2026-01-13*
+*Framework: Claude Code Starter v2.5.1*
+*Last updated: 2026-01-18*
 
 ---
 
 ## Current State
 
-**Version:** v1.8.3
-**Status:** Production - Quality assurance validation tool
+**Version:** 2.5.1 (Framework) | v1.8.3 (ClinicE) | v1.0.0.1 (ClinicH)
+**Status:** Production - Multi-clinic quality assurance validation tool
 **Branch:** main
+**Architecture:** Multi-clinic variant structure
 
 ---
 
@@ -18,10 +19,12 @@
 **Name:** PlanCrossCheck
 **Description:** C# Eclipse Scripting API (ESAPI) plugin for Varian Eclipse treatment planning system that performs comprehensive quality assurance checks on radiation therapy treatment plans.
 
+**Architecture:** Multi-clinic variant structure with shared Core and clinic-specific Variants
+
 **Tech Stack:**
-- C# / .NET Framework 4.8
+- C# / .NET Framework 4.6.1 - 4.8
 - WPF (Windows Presentation Foundation)
-- Varian Eclipse Scripting API (ESAPI) v16.1+
+- Varian Eclipse Scripting API (ESAPI) v16.1 - 18.0
   - VMS.TPS.Common.Model.API
   - VMS.TPS.Common.Model.Types
 - Platform: x64
@@ -42,31 +45,55 @@
 
 ```
 PlanCrossCheck/
-├── Script.cs                    # ESAPI plugin entry point
-├── Validators.cs                # Composite validation engine
-├── ValidationViewModel.cs       # MVVM view model for results
-├── MainControl.xaml/.cs         # WPF UI for displaying results
-├── SeverityToColorConverter.cs  # UI converter for severity colors
-├── .claude/                     # Framework files
-│   ├── SNAPSHOT.md             # This file
-│   ├── BACKLOG.md              # Current sprint tasks
-│   ├── ROADMAP.md              # Strategic planning
-│   ├── IDEAS.md                # Ideas & experiments
-│   └── ARCHITECTURE.md         # Code architecture
-├── Documentation/
-│   ├── VMS.TPS.Common.Model.API.xml    # ESAPI API reference
-│   └── VMS.TPS.Common.Model.Types.xml  # ESAPI Types reference
-└── Final Script/               # Version history folders
-    ├── Script V1.0/
-    ├── Script V1.2/
-    ├── Script V1.3/
-    └── Release 1.5.2/
+├── Core/                           # SHARED BASE CLASSES
+│   ├── Base/                       # Validation framework
+│   │   ├── ValidationSeverity.cs
+│   │   ├── ValidationResult.cs
+│   │   ├── ValidatorBase.cs
+│   │   └── CompositeValidator.cs
+│   └── UI/                         # Shared WPF UI
+│       ├── MainControl.xaml
+│       ├── MainControl.xaml.cs
+│       ├── SeverityToColorConverter.cs
+│       └── ValidationViewModel.cs
+│
+├── Variants/
+│   ├── ClinicE/                    # Eclipse 18.0 (.NET 4.8)
+│   │   ├── ClinicE.csproj
+│   │   ├── Script.cs
+│   │   ├── Utilities/PlanUtilities.cs
+│   │   └── Validators/             # 18 validators
+│   │       └── [Edge & Halcyon validators]
+│   │
+│   └── ClinicH/                    # Eclipse 16.1 (.NET 4.6.1)
+│       ├── ClinicH.csproj
+│       ├── Script.cs
+│       ├── Utilities/PlanUtilities.cs
+│       └── Validators/             # 11 validators
+│           └── [TrueBeam STX validators]
+│
+├── .claude/                        # Framework files
+├── Documentation/                  # ESAPI reference docs
+├── PlanCrossCheck.sln              # Solution (both variants)
+└── MIGRATION_COMPLETE.md           # Migration record
 ```
 
 ---
 
 ## Recent Progress
 
+### Architecture Migration (2026-01-18)
+- [x] **Migrated to multi-clinic variant architecture**
+- [x] Created Core/ with shared base classes and UI
+- [x] Created Variants/ClinicE/ for Eclipse 18.0 (Edge & Halcyon)
+- [x] Created Variants/ClinicH/ for Eclipse 16.1 (TrueBeam STX - Hadassah)
+- [x] Split ClinicH monolithic Validators.cs into 11 modular validators
+- [x] Updated solution file for both variants
+- [x] Cleaned up old monolithic structure
+- [x] Updated ARCHITECTURE.md for multi-clinic pattern
+- [x] Added .DS_Store to .gitignore
+
+### Previous Progress
 - [x] Implemented composite validator pattern architecture
 - [x] Created WPF UI with severity-based color coding
 - [x] Added PTV-to-Body surface proximity check (v1.5.x)
@@ -98,11 +125,11 @@ PlanCrossCheck/
 
 ## Active Work
 
-**Phase 1: Framework Migration & Documentation**
-- [x] Migrate to Claude Code Starter Framework v2.1
-- [ ] Update documentation with ESAPI reference information
-- [ ] Document existing validators and their validation logic
-- [ ] Create developer guide for adding new validators
+**Current Phase: Multi-Clinic Architecture Validation**
+- [ ] Build and test ClinicE variant in Eclipse 18.0
+- [ ] Build and test ClinicH variant in Eclipse 16.1
+- [ ] Verify all validators produce expected results
+- [ ] Update deployment documentation
 
 See [BACKLOG.md](./BACKLOG.md) for detailed task list.
 
@@ -111,17 +138,17 @@ See [BACKLOG.md](./BACKLOG.md) for detailed task list.
 ## Next Steps
 
 **Immediate:**
-- Complete framework migration documentation
-- Document all existing validators with examples
-- Add XML documentation comments to code
+- Build and test both variants
+- Verify deployment process
+- Update user documentation for variant selection
 
-**Short-term (v1.7.0):**
-- Expand validation coverage (beam geometry, MLC positions)
-- Enhanced error messages with recommendations
-- Add configurable tolerance thresholds
+**Short-term:**
+- Add third clinic variant if needed
+- Enhance validator test coverage
+- Document variant-specific validation rules
 
 **Long-term:**
-- User configuration system (v2.0.0)
+- User configuration system per variant (v2.0.0)
 - PDF/CSV export capabilities
 - Protocol compliance validation (v2.5.0)
 
@@ -131,6 +158,11 @@ See [ROADMAP.md](./ROADMAP.md) for full strategic plan.
 
 ## Key Concepts
 
+### Multi-Clinic Variant Architecture
+- **Core/**: Shared validation framework and UI (linked, not duplicated)
+- **Variants/**: Clinic-specific validators and machine logic
+- **Benefits**: No code duplication, easy to add clinics, isolated clinic rules
+
 ### Validation Architecture
 - **Composite Pattern:** Hierarchical validator structure with RootValidator orchestrating checks
 - **ValidatorBase:** Abstract base class for all validators
@@ -138,16 +170,43 @@ See [ROADMAP.md](./ROADMAP.md) for full strategic plan.
 - **ValidationResult:** Contains message, severity (Error/Warning/Info), and category
 
 ### ESAPI Integration
-- Plugin DLL: `Cross_Check.esapi.dll`
+- Plugin DLL: `TEST_Cross_Check.esapi.dll` (ClinicE) or `PlanCrossCheck.dll` (ClinicH)
 - Requires x64 platform targeting
 - Accessed via Eclipse Script menu
 - Works with ScriptContext providing access to plan data
 
 ### Build Process
+
+**Build both variants:**
 ```bash
-# Release build
 msbuild PlanCrossCheck.sln /p:Configuration=Release /p:Platform=x64
 ```
+
+**Build ClinicE only:**
+```bash
+msbuild Variants/ClinicE/ClinicE.csproj /p:Configuration=Release /p:Platform=x64
+```
+
+**Build ClinicH only:**
+```bash
+msbuild Variants/ClinicH/ClinicH.csproj /p:Configuration=Release /p:Platform=x64
+```
+
+---
+
+## Clinic Variants
+
+### ClinicE (Eclipse 18.0)
+- **Machines:** Varian Edge, Varian Halcyon
+- **Version:** 1.8.3
+- **Assembly:** `TEST_Cross_Check.esapi`
+- **Validators:** 18 (incl. collision, optimization, PTV-Body proximity)
+
+### ClinicH (Eclipse 16.1 - Hadassah)
+- **Machines:** TrueBeam STX (2 machines)
+- **Version:** 1.0.0.1
+- **Assembly:** `PlanCrossCheck`
+- **Validators:** 11 (TrueBeam STX-specific)
 
 ---
 

@@ -7,14 +7,14 @@ using VMS.TPS.Common.Model.Types;
 
 namespace PlanCrossCheck
 {
-    // 2.1 CT and Patient validator - adapted for Hadassah
+    // 2.1 CT and Patient validator - adapted for ClinicH
     public class CTAndPatientValidator : ValidatorBase
     {
         public override IEnumerable<ValidationResult> Validate(ScriptContext context)
         {
             var results = new List<ValidationResult>();
 
-            // User Origin validation - Hadassah uses 5mm tolerance
+            // User Origin validation - ClinicH uses 5mm tolerance
             if (context.StructureSet?.Image != null)
             {
                 var userOrigin = context.StructureSet.Image.UserOrigin;
@@ -46,7 +46,7 @@ namespace PlanCrossCheck
                     isZvalid ? ValidationSeverity.Info : ValidationSeverity.Error
                 ));
 
-                // Hadassah uses only one CT curve - simplified check
+                // ClinicH uses only one CT curve - simplified check
                 string imagingDevice = context.StructureSet.Image.Series.ImagingDeviceId;
                 results.Add(CreateResult(
                     "CT.Curve",

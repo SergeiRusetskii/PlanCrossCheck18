@@ -7,7 +7,7 @@ using VMS.TPS.Common.Model.Types;
 
 namespace PlanCrossCheck
 {
-    // 4. Fixation devices validator - placeholder for Hadassah
+    // 4. Fixation devices validator - ClinicH
     public class FixationValidator : ValidatorBase
     {
         public override IEnumerable<ValidationResult> Validate(ScriptContext context)

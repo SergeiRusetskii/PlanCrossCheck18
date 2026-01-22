@@ -58,7 +58,7 @@
 - [x] Created Core/Base/ with shared validator base classes
 - [x] Created Core/UI/ with shared WPF UI components
 - [x] Created Variants/ClinicE/ for Eclipse 18.0 (Edge & Halcyon)
-- [x] Created Variants/ClinicH/ for Eclipse 16.1 (TrueBeam STX - Hadassah)
+- [x] Created Variants/ClinicH/ for Eclipse 16.1 (TrueBeam STX)
 - [x] Split ClinicH monolithic Validators.cs (682 lines) into 11 modular validators
 - [x] Updated solution file to include both variants
 - [x] Cleaned up old monolithic structure

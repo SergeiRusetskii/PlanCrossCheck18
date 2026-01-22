@@ -7,7 +7,7 @@ using VMS.TPS.Common.Model.Types;
 
 namespace PlanCrossCheck
 {
-    // 2.3.3 Setup fields validator - Hadassah specific
+    // 2.3.3 Setup fields validator - ClinicH specific
     public class SetupFieldsValidator : ValidatorBase
     {
         public override IEnumerable<ValidationResult> Validate(ScriptContext context)
@@ -18,7 +18,7 @@ namespace PlanCrossCheck
             {
                 var setupFields = context.PlanSetup.Beams.Where(b => b.IsSetupField).ToList();
 
-                // Hadassah requires 3 setup fields
+                // ClinicH requires 3 setup fields
                 bool hasCorrectCount = setupFields.Count == 3;
                 results.Add(CreateResult(
                     "Fields.SetupFields",

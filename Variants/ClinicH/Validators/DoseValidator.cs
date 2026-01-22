@@ -7,7 +7,7 @@ using VMS.TPS.Common.Model.Types;
 
 namespace PlanCrossCheck
 {
-    // 2.2 Dose validator - adapted for Hadassah
+    // 2.2 Dose validator - adapted for ClinicH
     public class DoseValidator : ValidatorBase
     {
         public override IEnumerable<ValidationResult> Validate(ScriptContext context)
@@ -20,7 +20,7 @@ namespace PlanCrossCheck
                 bool isSRSPlan = context.PlanSetup.Beams.Any(b =>
                     !b.IsSetupField && b.Technique.ToString().Contains("SRS"));
 
-                // Dose grid size validation - Hadassah specific
+                // Dose grid size validation - ClinicH specific
                 double doseGridSize = context.PlanSetup.Dose.XRes; // Already in mm
                 bool isValidGrid = isSRSPlan ? doseGridSize <= 1.25 : doseGridSize <= 2.5;
 

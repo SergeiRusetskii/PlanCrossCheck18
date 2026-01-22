@@ -70,7 +70,7 @@ PlanCrossCheck/
 │       │   └── AssemblyInfo.cs     # Assembly metadata (v1.0.0.1)
 │       ├── Script.cs               # ESAPI entry point
 │       ├── Utilities/
-│       │   └── PlanUtilities.cs    # IsTrueBeamSTX (Hadassah)
+│       │   └── PlanUtilities.cs    # IsTrueBeamSTX
 │       └── Validators/             # 11 clinic-specific validators
 │           ├── RootValidator.cs
 │           ├── CourseValidator.cs
@@ -186,7 +186,7 @@ ValidatorBase (abstract)
 msbuild Variants/ClinicE/ClinicE.csproj /p:Configuration=Release /p:Platform=x64
 ```
 
-### ClinicH (Eclipse 16.1 - Hadassah)
+### ClinicH (Eclipse 16.1)
 
 **Configuration:**
 - Eclipse Version: 16.1

@@ -1,4 +1,4 @@
-# PlanCrossCheck - ClinicH Variant (Hadassah)
+# PlanCrossCheck - ClinicH Variant
 
 Quality assurance validation tool for Eclipse 16.1 with TrueBeam STX treatment machines.
 
@@ -8,7 +8,7 @@ Quality assurance validation tool for Eclipse 16.1 with TrueBeam STX treatment m
 
 ## Variant Overview
 
-**ClinicH** is designed specifically for Hadassah Medical Center using:
+**ClinicH** is designed for institutions using:
 - **Eclipse Version**: 16.1
 - **Machine Types**: TrueBeam STX (2 machines)
 - **.NET Framework**: 4.6.1
@@ -31,7 +31,7 @@ Quality assurance validation tool for Eclipse 16.1 with TrueBeam STX treatment m
 - **CTAndPatientValidator**:
   - User origin validation (**5mm tolerance** for all coordinates)
   - CT imaging device information
-  - Hadassah-specific tolerance settings
+  - Institution-specific tolerance settings
 
 #### 3. Dose Calculation & Energy
 - **DoseValidator**:
@@ -93,7 +93,7 @@ All setup fields must use **2.5X-FFF** energy.
 
 ---
 
-## Hadassah-Specific Settings
+## ClinicH-Specific Settings
 
 ### User Origin Tolerance
 - **X, Y, Z coordinates**: 5mm tolerance
@@ -267,7 +267,7 @@ Variants/ClinicH/
 ## Version History
 
 ### v1.0.0.1 (Current)
-- Initial release for Hadassah Medical Center
+- Initial release
 - Migrated from monolithic 682-line Validators.cs to modular structure
 - 11 validators split into separate files
 - TrueBeam STX-specific energy and dose rate validation
@@ -344,7 +344,7 @@ Based on ClinicE features, consider adding:
 
 - **Issues**: Report via GitHub Issues
 - **Email**: rusetskiy.s@gmail.com
-- **Institutional**: Consult Hadassah medical physics team
+- **Institutional**: Consult your medical physics team
 
 ---
 
@@ -356,4 +356,4 @@ Copyright (c) 2025 Sergei Rusetskii
 
 ---
 
-*ClinicH Variant - Eclipse 16.1 | TrueBeam STX (Hadassah)*
+*ClinicH Variant - Eclipse 16.1 | TrueBeam STX*

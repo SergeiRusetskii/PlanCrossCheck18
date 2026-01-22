@@ -86,7 +86,7 @@ PlanCrossCheck/
 - [x] **Migrated to multi-clinic variant architecture**
 - [x] Created Core/ with shared base classes and UI
 - [x] Created Variants/ClinicE/ for Eclipse 18.0 (Edge & Halcyon)
-- [x] Created Variants/ClinicH/ for Eclipse 16.1 (TrueBeam STX - Hadassah)
+- [x] Created Variants/ClinicH/ for Eclipse 16.1 (TrueBeam STX)
 - [x] Split ClinicH monolithic Validators.cs into 11 modular validators
 - [x] Updated solution file for both variants
 - [x] Cleaned up old monolithic structure
@@ -206,7 +206,7 @@ msbuild Variants/ClinicH/ClinicH.csproj /p:Configuration=Release /p:Platform=x64
 - **Assembly:** `TEST_Cross_Check.esapi`
 - **Validators:** 18 (incl. collision, optimization, PTV-Body proximity)
 
-### ClinicH (Eclipse 16.1 - Hadassah)
+### ClinicH (Eclipse 16.1)
 - **Machines:** TrueBeam STX (2 machines)
 - **Version:** 1.0.0.1
 - **Assembly:** `PlanCrossCheck`

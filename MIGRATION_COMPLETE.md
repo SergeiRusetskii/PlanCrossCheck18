@@ -33,7 +33,7 @@ PlanCrossCheck/
 │       ├── ClinicH.csproj             ✓ Project file (links to Core)
 │       ├── Properties/AssemblyInfo.cs  ✓ v1.0.0.1 metadata
 │       ├── Script.cs                   ✓ Entry point
-│       ├── Utilities/PlanUtilities.cs  ✓ IsTrueBeamSTX (Hadassah)
+│       ├── Utilities/PlanUtilities.cs  ✓ IsTrueBeamSTX
 │       └── Validators/                 ✓ 11 validators (split from monolithic)
 │           ├── RootValidator.cs
 │           ├── CourseValidator.cs
@@ -70,7 +70,7 @@ PlanCrossCheck/
 - ESAPI: RTM\16.1 (Eclipse 16.1)
 - Assembly: `PlanCrossCheck`
 - Monolithic Validators.cs split into 11 separate validator files
-- Machine type: TrueBeam STX (Hadassah)
+- Machine type: TrueBeam STX
 - Tolerances: 5mm user origin, specific energy validations
 
 ### 4. Solution Updated

@@ -6,10 +6,10 @@ using VMS.TPS.Common.Model.Types;
 
 namespace PlanCrossCheck
 {
-    // Utility methods for Hadassah configuration
+    // Utility methods for ClinicH configuration
     public static class PlanUtilities
     {
-        // Hadassah has 2 TrueBeam STX machines
+        // ClinicH has 2 TrueBeam STX machines
         public static bool IsTrueBeamSTX(string machineId) =>
             machineId?.Contains("STX") ?? false;
 

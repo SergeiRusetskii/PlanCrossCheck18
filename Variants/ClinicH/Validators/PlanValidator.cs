@@ -13,10 +13,13 @@ namespace PlanCrossCheck
         public PlanValidator()
         {
             AddValidator(new CTAndPatientValidator());
+            AddValidator(new UserOriginMarkerValidator());
             AddValidator(new DoseValidator());
             AddValidator(new FieldsValidator());
             AddValidator(new ReferencePointValidator());
             AddValidator(new FixationValidator());
+            AddValidator(new OptimizationValidator());
+            AddValidator(new CollisionValidator());
         }
 
         public override IEnumerable<ValidationResult> Validate(ScriptContext context)

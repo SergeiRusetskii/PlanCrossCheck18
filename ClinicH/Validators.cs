@@ -14,10 +14,10 @@ namespace PlanCrossCheck
         Info
     }
 
-    // Utility methods for Hadassah configuration
+    // Utility methods for ClinicH configuration
     public static class PlanUtilities
     {
-        // Hadassah has 2 TrueBeam STX machines
+        // Clinic has 2 TrueBeam STX machines
         public static bool IsTrueBeamSTX(string machineId) =>
             machineId?.Contains("STX") ?? false;
 
@@ -133,14 +133,14 @@ namespace PlanCrossCheck
         }
     }
 
-    // 2.1 CT and Patient validator - adapted for Hadassah
+    // 2.1 CT and Patient validator - adapted for ClinicH
     public class CTAndPatientValidator : ValidatorBase
     {
         public override IEnumerable<ValidationResult> Validate(ScriptContext context)
         {
             var results = new List<ValidationResult>();
 
-            // User Origin validation - Hadassah uses 5mm tolerance
+            // User Origin validation - ClinicH uses 5mm tolerance
             if (context.StructureSet?.Image != null)
             {
                 var userOrigin = context.StructureSet.Image.UserOrigin;
@@ -172,7 +172,7 @@ namespace PlanCrossCheck
                     isZvalid ? ValidationSeverity.Info : ValidationSeverity.Error
                 ));
 
-                // Hadassah uses only one CT curve - simplified check
+                // ClinicH uses only one CT curve - simplified check
                 string imagingDevice = context.StructureSet.Image.Series.ImagingDeviceId;
                 results.Add(CreateResult(
                     "CT.Curve",
@@ -185,7 +185,7 @@ namespace PlanCrossCheck
         }
     }
 
-    // 2.2 Dose validator - adapted for Hadassah
+    // 2.2 Dose validator - adapted for ClinicH
     public class DoseValidator : ValidatorBase
     {
         public override IEnumerable<ValidationResult> Validate(ScriptContext context)
@@ -198,7 +198,7 @@ namespace PlanCrossCheck
                 bool isSRSPlan = context.PlanSetup.Beams.Any(b =>
                     !b.IsSetupField && b.Technique.ToString().Contains("SRS"));
 
-                // Dose grid size validation - Hadassah specific
+                // Dose grid size validation - ClinicH specific
                 double doseGridSize = context.PlanSetup.Dose.XRes; // Already in mm
                 bool isValidGrid = isSRSPlan ? doseGridSize <= 1.25 : doseGridSize <= 2.5;
 
@@ -421,7 +421,7 @@ namespace PlanCrossCheck
         }
     }
 
-    // 2.3.3 Setup fields validator - Hadassah specific
+    // 2.3.3 Setup fields validator - ClinicH specific
     public class SetupFieldsValidator : ValidatorBase
     {
         public override IEnumerable<ValidationResult> Validate(ScriptContext context)
@@ -432,7 +432,7 @@ namespace PlanCrossCheck
             {
                 var setupFields = context.PlanSetup.Beams.Where(b => b.IsSetupField).ToList();
 
-                // Hadassah requires 3 setup fields
+                // ClinicH requires 3 setup fields
                 bool hasCorrectCount = setupFields.Count == 3;
                 results.Add(CreateResult(
                     "Fields.SetupFields",
@@ -613,7 +613,7 @@ namespace PlanCrossCheck
         }
     }
 
-    // 4. Fixation devices validator - placeholder for Hadassah
+    // 4. Fixation devices validator - placeholder for ClinicH
     public class FixationValidator : ValidatorBase
     {
         public override IEnumerable<ValidationResult> Validate(ScriptContext context)

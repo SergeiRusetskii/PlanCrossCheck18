@@ -48,36 +48,45 @@ PlanCrossCheck/
 ├── .claude/                        # SHARED FRAMEWORK ONLY
 ├── backup/                         # Backup of experimental validators
 │   └── ClinicH-new-validators/
-├── ClinicH/                        # Independent ClinicH project
+├── ClinicE/                        # Eclipse 18.0 variant
+│   ├── Properties/
+│   ├── Validators/                 # 18 modular validators
+│   │   ├── Base/
+│   │   ├── Utilities/
+│   │   └── [18 validator files]
+│   ├── MainControl.xaml
+│   ├── MainControl.xaml.cs
+│   ├── PlanCrossCheck.csproj
+│   ├── PlanCrossCheck.sln
+│   ├── Script.cs
+│   ├── SeverityToColorConverter.cs
+│   └── ValidationViewModel.cs
+├── ClinicH/                        # Eclipse 16.1 variant
+│   ├── Properties/
+│   ├── MainControl.xaml
+│   ├── MainControl.xaml.cs
+│   ├── PlanCrossCheck.csproj
+│   ├── PlanCrossCheck.sln
 │   ├── README.md
-│   └── .gitkeep                    # Placeholder for user files
+│   ├── Script.cs
+│   ├── SeverityToColorConverter.cs
+│   ├── ValidationViewModel.cs
+│   └── Validators.cs               # Monolithic validators
 ├── Documentation/                  # ESAPI reference docs
-├── Properties/                     # ClinicE assembly info
-├── Validators/                     # ClinicE validators (18 files)
-│   ├── Base/                       # Base classes & interfaces
-│   ├── Utilities/                  # Helper utilities
-│   └── [18 validator files]
-├── MainControl.xaml                # ClinicE UI layout
-├── MainControl.xaml.cs             # ClinicE UI code-behind
-├── Script.cs                       # ClinicE entry point
-├── SeverityToColorConverter.cs     # ClinicE UI converter
-├── ValidationViewModel.cs          # ClinicE view model
-├── PlanCrossCheck.csproj           # ClinicE project file
-├── PlanCrossCheck.sln              # ClinicE solution
-└── README.md                       # Two-clinic documentation
+└── README.md                       # Project overview
 ```
 
 ---
 
 ## Recent Progress
 
-### Conservative Restoration (2026-01-24)
-- [x] **Restored ClinicE v1.8.3 to root** from commit ccc4eb6
+### Repository Structure Finalization (2026-01-24)
+- [x] **Moved ClinicE v1.8.3 to ClinicE/ folder** for symmetry
+- [x] **User added ClinicH clinical files** to ClinicH/ folder
 - [x] Created backup/ folder for ClinicH experimental validators
 - [x] Removed shared Core/ architecture
 - [x] Removed Variants/ folder structure
-- [x] Created ClinicH/ as independent project folder
-- [x] Updated README.md for two-clinic structure
+- [x] Updated README.md (short summary format)
 - [x] Created git tag: pre-restoration-checkpoint
 
 **Rationale:**
@@ -118,12 +127,13 @@ PlanCrossCheck/
 
 ## Active Work
 
-**Current Phase: Two-Clinic Structure Active**
-- [x] Restore ClinicE v1.8.3 to root
+**Current Phase: Two-Clinic Structure Complete**
+- [x] Restore ClinicE v1.8.3 to ClinicE/ folder
 - [x] Create ClinicH/ independent folder
 - [x] Backup experimental validators
-- [x] Update documentation
 - [x] User populated ClinicH/ with clinical files
+- [x] Update documentation and framework files
+- [x] Repository structure finalized
 - [ ] Verify ClinicE builds successfully
 - [ ] Verify ClinicH builds successfully
 - [ ] Test both variants in their respective Eclipse versions
@@ -156,8 +166,8 @@ See [ROADMAP.md](./ROADMAP.md) for full strategic plan.
 ## Key Concepts
 
 ### Conservative Two-Clinic Architecture
-- **Root directory:** ClinicE v1.8.3 (proven clinical version)
-- **ClinicH/ directory:** Independent project (user-provided)
+- **ClinicE/ directory:** ClinicE v1.8.3 (proven clinical version)
+- **ClinicH/ directory:** Independent project (clinical version)
 - **Zero shared code:** No dependencies between clinics
 - **Manual porting:** Copy validators from ClinicE to ClinicH as needed
 - **Shared framework only:** `.claude/` files are the only shared component
@@ -174,20 +184,28 @@ See [ROADMAP.md](./ROADMAP.md) for full strategic plan.
 - Accessed via Eclipse Script menu
 - Works with ScriptContext providing access to plan data
 
-### Build Process (ClinicE)
+### Build Process
 
+**ClinicE:**
 ```bash
+cd ClinicE
 msbuild PlanCrossCheck.csproj /p:Configuration=Release /p:Platform=x64
 ```
+Produces: `ClinicE/Release/TEST_Cross_Check.esapi.dll`
 
-Produces: `Release/TEST_Cross_Check.esapi.dll`
+**ClinicH:**
+```bash
+cd ClinicH
+msbuild PlanCrossCheck.csproj /p:Configuration=Release /p:Platform=x64
+```
+Produces: `ClinicH/Release/PlanCrossCheck.dll`
 
 ---
 
 ## Clinic Variants
 
-### ClinicE (Root Directory)
-- **Location:** Root directory
+### ClinicE (ClinicE/ Directory)
+- **Location:** ClinicE/ folder
 - **Machines:** Varian Edge, Varian Halcyon
 - **Eclipse Version:** 18.0
 - **.NET Framework:** 4.8

@@ -1,6 +1,6 @@
 # ARCHITECTURE — PlanCrossCheck
 
-*Multi-Clinic Variant Architecture Documentation*
+*Independent Two-Clinic Architecture Documentation*
 
 ---
 
@@ -8,9 +8,10 @@
 
 PlanCrossCheck is a C# Eclipse Scripting API (ESAPI) plugin that provides comprehensive quality assurance validation for radiation therapy treatment plans in Varian Eclipse treatment planning system.
 
-The project uses a **multi-clinic variant architecture** where:
-- **Core/** contains shared base classes and UI components
-- **Variants/** contains clinic-specific implementations (ClinicE, ClinicH)
+The project uses an **independent two-clinic architecture** where:
+- **ClinicE/** contains Eclipse 18.0 variant (complete standalone project)
+- **ClinicH/** contains Eclipse 16.1 variant (complete standalone project)
+- **No shared code** between clinics (zero dependencies)
 
 **Tech Stack:**
 - C# / .NET Framework 4.6.1 - 4.8
@@ -24,485 +25,447 @@ The project uses a **multi-clinic variant architecture** where:
 
 ```
 PlanCrossCheck/
-├── Core/                           # SHARED BASE CLASSES
-│   ├── Base/                       # Validation framework
-│   │   ├── ValidationSeverity.cs   # Info/Warning/Error enum
-│   │   ├── ValidationResult.cs     # Result data class
-│   │   ├── ValidatorBase.cs        # Abstract base validator
-│   │   └── CompositeValidator.cs   # Composite pattern base
-│   └── UI/                         # Shared WPF UI components
-│       ├── MainControl.xaml        # UI markup (linked by variants)
-│       ├── MainControl.xaml.cs     # UI code-behind (linked by variants)
-│       ├── SeverityToColorConverter.cs  # WPF value converter
-│       └── ValidationViewModel.cs  # MVVM view model
-│
-├── Variants/
-│   ├── ClinicE/                    # ECLIPSE 18.0 (.NET 4.8)
-│   │   ├── ClinicE.csproj          # Project file (links to Core)
-│   │   ├── Properties/
-│   │   │   └── AssemblyInfo.cs     # Assembly metadata (v1.8.3)
-│   │   ├── Script.cs               # ESAPI entry point
+├── .claude/                        # Shared framework files only
+├── backup/                         # Backup of experimental validators
+│   └── ClinicH-new-validators/
+├── ClinicE/                        # ECLIPSE 18.0 (.NET 4.8)
+│   ├── Properties/
+│   │   └── AssemblyInfo.cs         # v1.8.3
+│   ├── Validators/                 # 18 modular validators
+│   │   ├── Base/                   # Base classes & interfaces
+│   │   │   ├── ValidationSeverity.cs
+│   │   │   ├── ValidationResult.cs
+│   │   │   ├── ValidatorBase.cs
+│   │   │   └── CompositeValidator.cs
 │   │   ├── Utilities/
 │   │   │   └── PlanUtilities.cs    # IsEdgeMachine, IsHalcyonMachine
-│   │   └── Validators/             # 18 clinic-specific validators
-│   │       ├── RootValidator.cs
-│   │       ├── CourseValidator.cs
-│   │       ├── PlanValidator.cs
-│   │       ├── CTAndPatientValidator.cs
-│   │       ├── UserOriginMarkerValidator.cs
-│   │       ├── DoseValidator.cs
-│   │       ├── FieldsValidator.cs
-│   │       ├── FieldNamesValidator.cs
-│   │       ├── GeometryValidator.cs
-│   │       ├── SetupFieldsValidator.cs
-│   │       ├── BeamEnergyValidator.cs
-│   │       ├── ReferencePointValidator.cs
-│   │       ├── FixationValidator.cs
-│   │       ├── CollisionValidator.cs
-│   │       ├── OptimizationValidator.cs
-│   │       ├── PlanningStructuresValidator.cs
-│   │       ├── ContrastStructureValidator.cs
-│   │       └── PTVBodyProximityValidator.cs
-│   │
-│   └── ClinicH/                    # ECLIPSE 16.1 (.NET 4.6.1)
-│       ├── ClinicH.csproj          # Project file (links to Core)
-│       ├── Properties/
-│       │   └── AssemblyInfo.cs     # Assembly metadata (v1.0.0.1)
-│       ├── Script.cs               # ESAPI entry point
-│       ├── Utilities/
-│       │   └── PlanUtilities.cs    # IsTrueBeamSTX
-│       └── Validators/             # 11 clinic-specific validators
-│           ├── RootValidator.cs
-│           ├── CourseValidator.cs
-│           ├── PlanValidator.cs
-│           ├── CTAndPatientValidator.cs    # 5mm tolerance
-│           ├── DoseValidator.cs            # TrueBeam STX energies
-│           ├── FieldsValidator.cs
-│           ├── FieldNamesValidator.cs
-│           ├── GeometryValidator.cs
-│           ├── SetupFieldsValidator.cs     # CBCT/SF_0/SF_270
-│           ├── ReferencePointValidator.cs
-│           └── FixationValidator.cs
+│   │   ├── RootValidator.cs
+│   │   ├── CourseValidator.cs
+│   │   ├── PlanValidator.cs
+│   │   ├── CTAndPatientValidator.cs
+│   │   ├── UserOriginMarkerValidator.cs
+│   │   ├── DoseValidator.cs
+│   │   ├── FieldsValidator.cs
+│   │   ├── BeamEnergyValidator.cs
+│   │   ├── FieldNamesValidator.cs
+│   │   ├── OptimizationValidator.cs
+│   │   ├── GeometryValidator.cs
+│   │   ├── CollisionValidator.cs
+│   │   ├── SetupFieldsValidator.cs
+│   │   ├── FixationValidator.cs
+│   │   ├── PlanningStructuresValidator.cs
+│   │   ├── ContrastStructureValidator.cs
+│   │   ├── PTVBodyProximityValidator.cs
+│   │   └── ReferencePointValidator.cs
+│   ├── MainControl.xaml            # WPF UI
+│   ├── MainControl.xaml.cs
+│   ├── SeverityToColorConverter.cs
+│   ├── ValidationViewModel.cs
+│   ├── Script.cs                   # ESAPI entry point
+│   ├── PlanCrossCheck.csproj
+│   └── PlanCrossCheck.sln
 │
-├── .claude/                        # Framework files
-│   ├── SNAPSHOT.md                 # Project snapshot
-│   ├── BACKLOG.md                  # Current sprint tasks
-│   ├── ROADMAP.md                  # Strategic roadmap
-│   ├── IDEAS.md                    # Ideas & experiments
-│   ├── ARCHITECTURE.md             # This file
-│   └── DEVELOPER_GUIDE.md          # Guide for adding validators
+├── ClinicH/                        # ECLIPSE 16.1 (.NET 4.6.1)
+│   ├── Properties/
+│   │   └── AssemblyInfo.cs         # v1.0.0.1
+│   ├── Validators.cs               # Monolithic validators (682 lines)
+│   ├── MainControl.xaml            # WPF UI
+│   ├── MainControl.xaml.cs
+│   ├── SeverityToColorConverter.cs
+│   ├── ValidationViewModel.cs
+│   ├── Script.cs                   # ESAPI entry point
+│   ├── PlanCrossCheck.csproj
+│   ├── PlanCrossCheck.sln
+│   └── README.md
 │
-├── Documentation/                  # ESAPI Reference Documentation
-│   ├── VMS.TPS.Common.Model.API.xml
-│   └── VMS.TPS.Common.Model.Types.xml
-│
-├── CLAUDE.md                       # AI Agent instructions
-├── README.md                       # Project documentation
-├── PlanCrossCheck.sln              # Solution file (both variants)
-└── MIGRATION_COMPLETE.md           # Multi-clinic migration record
+├── Documentation/                  # ESAPI reference materials
+└── README.md                       # Project overview
 ```
 
 ---
 
-## Architecture Principles
+## Architecture Philosophy
 
-### 1. Multi-Clinic Variant Pattern
+### Independent Projects
 
-**Problem:** Different clinics use different Eclipse versions, machine types, and validation rules.
+Each clinic is a **completely independent project** with:
+- ✅ Own .csproj and .sln files
+- ✅ Own validators (modular or monolithic)
+- ✅ Own base classes and utilities
+- ✅ Own UI components
+- ✅ Own build output
+- ✅ Zero dependencies on other clinics
 
-**Solution:** Shared Core + Clinic-Specific Variants
-- **Core/**: Shared validation framework and UI (linked, not duplicated)
-- **Variants/**: Clinic-specific validators and machine logic
+### Benefits
 
-**Benefits:**
-- No code duplication for common functionality
-- Easy to add new clinic variants
-- Clinic-specific rules isolated in their own folders
-- Independent versioning per clinic
+1. **Simplicity** - No shared code means no abstraction complexity
+2. **Independence** - Changes to one clinic don't affect the other
+3. **Clarity** - Each project is self-contained and easy to understand
+4. **Safety** - Clinical versions remain untouched when working on other variants
+5. **Portability** - Each clinic can be copied/forked independently
 
-### 2. Composite Pattern for Validators
+### Feature Porting
 
-**Structure:**
-```
-ValidatorBase (abstract)
-├── CompositeValidator (abstract)
-│   ├── RootValidator
-│   │   ├── CourseValidator
-│   │   └── PlanValidator
-│   │       ├── CTAndPatientValidator
-│   │       ├── DoseValidator
-│   │       ├── FieldsValidator
-│   │       │   ├── FieldNamesValidator
-│   │       │   ├── GeometryValidator
-│   │       │   └── SetupFieldsValidator
-│   │       └── [other validators...]
-```
-
-**Benefits:**
-- Easy to add new validators
-- Validators can be nested
-- Uniform interface via `ValidatorBase.Validate()`
-- Results aggregate up the tree
-
-### 3. MVVM Pattern for UI
-
-**Components:**
-- **Model:** ESAPI objects (`Plan`, `Dose`, `Structure`)
-- **View:** `MainControl.xaml` (WPF UI)
-- **ViewModel:** `ValidationViewModel` (orchestrates validation)
-
-**Benefits:**
-- Testable validation logic
-- UI updates automatically
-- Separation of concerns
+Since clinics are independent, features are ported **manually**:
+1. Identify useful validator in ClinicE
+2. Copy file to ClinicH
+3. Adapt for Eclipse 16.1 API differences if needed
+4. Test independently
 
 ---
 
-## Clinic Variants
+## ClinicE Architecture (Eclipse 18.0)
 
-### ClinicE (Eclipse 18.0)
+### Version & Configuration
 
-**Configuration:**
-- Eclipse Version: 18.0
-- .NET Framework: 4.8
-- ESAPI: RTM\18.0
-- Assembly: `TEST_Cross_Check.esapi`
-- Version: 1.8.3
+- **Eclipse:** 18.0
+- **.NET Framework:** 4.8
+- **Platform:** x64
+- **Version:** v1.8.3
+- **Status:** Production (proven clinical deployment)
 
-**Machine Types:**
-- Varian Edge (TrueBeam)
-- Varian Halcyon
+### Machine Support
 
-**Key Features:**
-- 18 validators
-- Machine-specific validation (Edge vs Halcyon)
-- User origin tolerance: 2mm (Edge), 5mm (Halcyon)
-- Energies: 6X, 10X, 6X-FFF, 10X-FFF (Edge); 6X-FFF (Halcyon)
-- Setup fields: CBCT + SF-0 (Edge); kVCBCT (Halcyon)
-- Advanced features: Collision detection, PTV-Body proximity, Optimization checks
+- **Varian Edge** (TrueBeam with imaging)
+- **Varian Halcyon** (Ring gantry system)
 
-**Build Command:**
+### Validator Architecture
+
+**Modular design** with 18 validators organized by validation domain:
+
+1. **RootValidator** - Composite orchestrator
+2. **CourseValidator** - Course ID format
+3. **PlanValidator** - Plan type, approval status
+4. **CTAndPatientValidator** - User origin, CT device
+5. **UserOriginMarkerValidator** - Marker detection (500HU threshold)
+6. **DoseValidator** - Grid resolution, dose coverage
+7. **FieldsValidator** - Field configuration
+8. **BeamEnergyValidator** - Energy consistency, FFF validation
+9. **FieldNamesValidator** - Field naming conventions, HyperArc support
+10. **OptimizationValidator** - Jaw tracking, arc spacing
+11. **GeometryValidator** - Gantry, collimator, couch angles
+12. **CollisionValidator** - Full 360° collision detection
+13. **SetupFieldsValidator** - Setup field requirements
+14. **FixationValidator** - Fixation device verification (Alta/Encompass)
+15. **PlanningStructuresValidator** - Air structures, PRV structures
+16. **ContrastStructureValidator** - Contrast structure validation
+17. **PTVBodyProximityValidator** - PTV-to-Body distance checks
+18. **ReferencePointValidator** - Reference point validation
+
+### Base Classes
+
+**Location:** `ClinicE/Validators/Base/`
+
+- **ValidationSeverity** - Enum: Info, Warning, Error
+- **ValidationResult** - Data class for validation messages
+- **ValidatorBase** - Abstract base for all validators
+- **CompositeValidator** - Base for hierarchical validators
+
+### Utilities
+
+**Location:** `ClinicE/Validators/Utilities/`
+
+- **PlanUtilities** - Machine detection helpers
+  - `IsEdgeMachine(machineId)`
+  - `IsHalcyonMachine(machineId)`
+
+### Build Output
+
 ```bash
-msbuild Variants/ClinicE/ClinicE.csproj /p:Configuration=Release /p:Platform=x64
+cd ClinicE
+msbuild PlanCrossCheck.csproj /p:Configuration=Release /p:Platform=x64
 ```
 
-### ClinicH (Eclipse 16.1)
+**Output:** `ClinicE/Release/TEST_Cross_Check.esapi.dll`
 
-**Configuration:**
-- Eclipse Version: 16.1
-- .NET Framework: 4.6.1
-- ESAPI: RTM\16.1
-- Assembly: `PlanCrossCheck`
-- Version: 1.0.0.1
+---
 
-**Machine Types:**
-- TrueBeam STX (2 machines)
+## ClinicH Architecture (Eclipse 16.1)
 
-**Key Features:**
-- 11 validators
-- TrueBeam STX-specific validation
-- User origin tolerance: 5mm (all coordinates)
-- Energies: 6X, 10X, 15X, 6X-FFF, 10X-FFF
-- Setup fields: CBCT, SF_0, SF_270/90
-- Setup field energy: 2.5X-FFF
-- Dose rates: 1400 MU/min (6X-FFF), 2400 MU/min (10X-FFF), 600 MU/min (others)
+### Version & Configuration
 
-**Build Command:**
+- **Eclipse:** 16.1
+- **.NET Framework:** 4.6.1
+- **Platform:** x64
+- **Version:** v1.0.0.1
+- **Status:** Clinical
+
+### Machine Support
+
+- **TrueBeam STX** (2 machines)
+
+### Validator Architecture
+
+**Monolithic design** with all validators in single file:
+
+**Location:** `ClinicH/Validators.cs` (682 lines)
+
+Contains:
+- PlanUtilities class
+- All validator classes in single file
+- Inline base classes and result structures
+
+### Build Output
+
 ```bash
-msbuild Variants/ClinicH/ClinicH.csproj /p:Configuration=Release /p:Platform=x64
+cd ClinicH
+msbuild PlanCrossCheck.csproj /p:Configuration=Release /p:Platform=x64
+```
+
+**Output:** `ClinicH/Release/PlanCrossCheck.dll`
+
+---
+
+## UI Architecture (Both Clinics)
+
+### WPF Components
+
+Both clinics have identical UI structure (independent implementations):
+
+**MainControl.xaml** - XAML markup
+- TreeView for hierarchical validation results
+- DataTemplate for validation items
+- Severity-based styling
+
+**MainControl.xaml.cs** - Code-behind
+- UserControl initialization
+- TreeView setup
+
+**ValidationViewModel.cs** - MVVM ViewModel
+- `ValidationResults` observable collection
+- UI data binding
+
+**SeverityToColorConverter.cs** - Value Converter
+- Info → Blue
+- Warning → Gold
+- Error → Red
+
+### Entry Point
+
+**Script.cs** - ESAPI Entry Point
+```csharp
+public void Execute(ScriptContext context)
+{
+    var validator = new RootValidator();
+    var results = validator.Validate(context);
+    // Display results in MainControl
+}
 ```
 
 ---
 
-## Key Components
+## Validation Result Flow
 
-### 1. Core/Base Classes
+### ClinicE (Modular)
 
-#### ValidatorBase.cs
-**Purpose:** Abstract base for all validators
-
-**Key Method:**
-```csharp
-public abstract IEnumerable<ValidationResult> Validate(ScriptContext context);
+```
+Script.cs
+  └─> RootValidator (composite)
+       ├─> CourseValidator
+       ├─> PlanValidator
+       ├─> FieldsValidator (composite)
+       │    ├─> BeamEnergyValidator
+       │    ├─> FieldNamesValidator
+       │    └─> ...
+       └─> [other validators]
+            └─> List<ValidationResult>
+                 └─> MainControl.xaml (TreeView binding)
 ```
 
-**Helper Method:**
-```csharp
-protected ValidationResult CreateResult(string category, string message, ValidationSeverity severity)
+### ClinicH (Monolithic)
+
 ```
-
-#### CompositeValidator.cs
-**Purpose:** Composite pattern implementation
-
-**Key Features:**
-- Maintains list of child validators
-- `AddValidator()` to build hierarchy
-- `Validate()` aggregates results from children
-
-#### ValidationResult.cs
-**Purpose:** Data class for validation results
-
-**Properties:**
-- `string Category` - Groups results in UI
-- `string Message` - Validation message
-- `ValidationSeverity Severity` - Error/Warning/Info
-- `bool IsFieldResult` - For field-specific results
-- `string AllPassSummary` - Summary when all pass
-
-#### ValidationSeverity.cs
-**Purpose:** Enum for result severity
-
-**Values:**
-- `Error` - Critical issues (red)
-- `Warning` - Important issues (yellow)
-- `Info` - Passed checks (green)
-
-### 2. Core/UI Components
-
-#### MainControl.xaml/.cs
-**Purpose:** WPF UserControl displaying validation results
-
-**Features:**
-- Grouped list display (by category)
-- Color-coded by severity
-- Scrollable results area
-- Auto-updates via MVVM binding
-
-#### ValidationViewModel.cs
-**Purpose:** MVVM view model for validation UI
-
-**Key Properties:**
-- `ObservableCollection<ValidationResult> ValidationResults`
-
-**Key Methods:**
-- Constructor creates `RootValidator` and runs validation
-- `GetCategoryOrder()` defines display order
-- Post-processing collapses field-level results when all pass
-
-#### SeverityToColorConverter.cs
-**Purpose:** WPF value converter for severity-to-color mapping
-
-**Mapping:**
-- `Error` → Red
-- `Warning` → Orange/Yellow
-- `Info` → Green/Blue
-
-### 3. Variant-Specific Components
-
-#### Script.cs (per variant)
-**Purpose:** ESAPI plugin entry point
-
-**Key Features:**
-- Implements `IScriptObject` interface
-- `Execute()` method called by Eclipse
-- Creates main WPF window with `MainControl`
-- Passes `ScriptContext` to ViewModel
-- Window title shows version and clinic
-
-#### PlanUtilities.cs (per variant)
-**Purpose:** Clinic-specific helper methods
-
-**ClinicE Methods:**
-- `IsEdgeMachine(string machineId)` - Detects Edge machines
-- `IsHalcyonMachine(string machineId)` - Detects Halcyon machines
-- `IsArcBeam(Beam beam)` - Arc vs static beam detection
-- `HasAnyFieldWithCouch(IEnumerable<Beam> beams)` - Couch rotation detection
-- `ContainsSRS(Beam beam)` - SRS technique detection
-
-**ClinicH Methods:**
-- `IsTrueBeamSTX(string machineId)` - Detects TrueBeam STX
-- `IsArcBeam(Beam beam)` - Arc vs static beam detection
-- `HasAnyFieldWithCouch(IEnumerable<Beam> beams)` - Couch rotation detection
-- `ContainsSRS(string technique)` - SRS technique detection
-
-#### Validators (per variant)
-**Purpose:** Clinic-specific validation rules
-
-Each validator implements `ValidatorBase.Validate()` and returns clinic-specific validation results.
+Script.cs
+  └─> RootValidator (from Validators.cs)
+       ├─> [inline validator methods]
+       └─> List<ValidationResult>
+            └─> MainControl.xaml (TreeView binding)
+```
 
 ---
 
-## Data Flow
+## Key Design Patterns
 
+### Composite Pattern (ClinicE)
+
+**CompositeValidator** enables hierarchical validation:
+- Parent validators orchestrate child validators
+- Results are aggregated and categorized
+- Enables modular organization
+
+### Result Aggregation
+
+**ValidationResult** structure:
+```csharp
+public class ValidationResult
+{
+    public string Message { get; set; }
+    public ValidationSeverity Severity { get; set; }
+    public string Category { get; set; }
+}
 ```
-Eclipse TPS
-    ↓
-[User selects "Run Script"]
-    ↓
-Script.Execute(ScriptContext context)  ← Variant-specific (ClinicE or ClinicH)
-    ↓
-MainWindow created
-    ↓
-ValidationViewModel created (from Core/UI)
-    ↓
-RootValidator.Validate(context)  ← Variant-specific
-    ↓
-[Composite validators execute children]
-    ↓
-Individual validators access:
-  - context.Patient
-  - context.PlanSetup
-  - context.PlanSetup.Dose
-  - context.PlanSetup.StructureSet
-  - context.PlanSetup.Beams
-    ↓
-ValidationResult objects created
-    ↓
-Results → ObservableCollection (Core/UI)
-    ↓
-WPF UI updates via binding (Core/UI MainControl)
-    ↓
-User sees color-coded results
-```
+
+### MVVM Pattern
+
+**Separation of concerns:**
+- Model: ValidationResult, ESAPI data
+- ViewModel: ValidationViewModel
+- View: MainControl.xaml
 
 ---
 
 ## ESAPI Integration
 
-### Key ESAPI Namespaces
+### Required References
+
+Both projects reference:
+- `VMS.TPS.Common.Model.API.dll`
+- `VMS.TPS.Common.Model.Types.dll`
+
+### Context Access
+
 ```csharp
-using VMS.TPS.Common.Model.API;    // Core API classes
-using VMS.TPS.Common.Model.Types;  // Value types (DoseValue, VVector, etc.)
+public void Execute(ScriptContext context)
+{
+    var patient = context.Patient;
+    var planSetup = context.PlanSetup;
+    var course = context.Course;
+    // Validation logic
+}
 ```
 
-### Common ESAPI Objects Used
+### Common ESAPI Objects
 
-**From ScriptContext:**
-- `context.Patient` - Patient demographic and clinical data
-- `context.Course` - Treatment course
-- `context.PlanSetup` - Treatment plan (most used)
-
-**From PlanSetup:**
-- `plan.Dose` - Dose distribution matrix
-- `plan.StructureSet` - Contoured structures
-- `plan.Beams` - Treatment beam collection
-- `plan.TotalDose` - Prescription dose
-- `plan.NumberOfFractions` - Fractionation
-
-**Key Methods:**
-- `dose.GetVoxels()` - Access dose matrix data
-- `structure.GetContoursOnImagePlane()` - Structure geometry
-- `beam.ControlPoints` - Beam parameters at each control point
+- `Patient` - Patient demographics, structures
+- `PlanSetup` - Plan configuration, beams, dose
+- `Course` - Course information
+- `Beam` - Individual beam parameters
+- `Structure` - Structure set contours
+- `Dose` - Dose distribution
 
 ---
 
 ## Build Configuration
 
-### Building Both Variants
-```bash
-msbuild PlanCrossCheck.sln /p:Configuration=Release /p:Platform=x64
-```
+### Both Clinics
 
-### Building Individual Variants
-**ClinicE:**
-```bash
-msbuild Variants/ClinicE/ClinicE.csproj /p:Configuration=Release /p:Platform=x64
-```
+- **Platform:** x64 (ESAPI requirement)
+- **Configuration:** Release (for deployment)
+- **Output:** ESAPI plugin DLL
 
-**ClinicH:**
-```bash
-msbuild Variants/ClinicH/ClinicH.csproj /p:Configuration=Release /p:Platform=x64
-```
+### ClinicE Specific
 
-### Project References
+- **Assembly:** `TEST_Cross_Check.esapi`
+- **.NET:** 4.8
+- **ESAPI:** 18.0
 
-**ClinicE.csproj:**
-- Target: .NET Framework 4.8
-- ESAPI: `C:\Program Files (x86)\Varian\RTM\18.0\esapi\API\`
-- Links: `..\..\Core\Base\*.cs` and `..\..\Core\UI\*.xaml/cs`
+### ClinicH Specific
 
-**ClinicH.csproj:**
-- Target: .NET Framework 4.6.1
-- ESAPI: `C:\Program Files (x86)\Varian\RTM\16.1\esapi\API\`
-- Links: `..\..\Core\Base\*.cs` and `..\..\Core\UI\*.xaml/cs`
-
----
-
-## Extension Points
-
-### Adding a New Clinic Variant
-
-1. **Create variant directory:**
-   ```
-   Variants/ClinicX/
-   ```
-
-2. **Create .csproj file:**
-   - Copy from ClinicE or ClinicH
-   - Update target framework and ESAPI version
-   - Ensure Core files are linked (not copied)
-
-3. **Create variant-specific files:**
-   - `Script.cs` (update window title and assembly name)
-   - `Properties/AssemblyInfo.cs` (update version)
-   - `Utilities/PlanUtilities.cs` (machine detection logic)
-
-4. **Create validators:**
-   - Copy relevant validators from existing variant
-   - Modify validation rules for clinic-specific requirements
-
-5. **Add to solution:**
-   - Update `PlanCrossCheck.sln` to include new project
-
-### Adding New Validators to Existing Variant
-
-1. **Create validator class in variant folder:**
-   ```csharp
-   namespace PlanCrossCheck
-   {
-       public class MyNewValidator : ValidatorBase
-       {
-           public override IEnumerable<ValidationResult> Validate(ScriptContext context)
-           {
-               var results = new List<ValidationResult>();
-               // Implementation
-               return results;
-           }
-       }
-   }
-   ```
-
-2. **Add to appropriate composite validator:**
-   ```csharp
-   AddValidator(new MyNewValidator());
-   ```
-
-3. **Update .csproj:**
-   ```xml
-   <Compile Include="Validators\MyNewValidator.cs" />
-   ```
+- **Assembly:** `PlanCrossCheck`
+- **.NET:** 4.6.1
+- **ESAPI:** 16.1
 
 ---
 
 ## Deployment
 
-### ClinicE Deployment
-1. Build ClinicE project
-2. Locate `TEST_Cross_Check.esapi.dll` in `Variants/ClinicE/Release/`
-3. Copy to Eclipse 18.0 plugin directory
-4. Restart Eclipse
+### Installation Steps
 
-### ClinicH Deployment
-1. Build ClinicH project
-2. Locate `PlanCrossCheck.dll` in `Variants/ClinicH/Release/`
-3. Copy to Eclipse 16.1 plugin directory
-4. Restart Eclipse
+1. **Build** appropriate clinic variant
+2. **Locate DLL** in Release folder
+3. **Copy** to Eclipse plugin directory:
+   - `C:\Program Files (x86)\Varian\RTM\[Version]\ExternalBeam\PlugIns\`
+4. **Restart** Eclipse
+5. **Access** via Scripts menu
+
+### Version Management
+
+Each clinic manages versions independently:
+- **ClinicE:** Properties/AssemblyInfo.cs (v1.8.3)
+- **ClinicH:** Properties/AssemblyInfo.cs (v1.0.0.1)
+
+---
+
+## Development Workflow
+
+### Working on ClinicE
+
+1. Navigate to `ClinicE/`
+2. Make changes to validators
+3. Build: `msbuild PlanCrossCheck.csproj`
+4. Test in Eclipse 18.0
+5. Commit changes
+
+### Working on ClinicH
+
+1. Navigate to `ClinicH/`
+2. Make changes to validators
+3. Build: `msbuild PlanCrossCheck.csproj`
+4. Test in Eclipse 16.1
+5. Commit changes
+
+### Porting Features
+
+To copy validator from ClinicE to ClinicH:
+1. Review `ClinicE/Validators/[ValidatorName].cs`
+2. Adapt code for Eclipse 16.1 API if needed
+3. Integrate into `ClinicH/Validators.cs` or create new file
+4. Test in ClinicH environment
 
 ---
 
 ## Testing Strategy
 
 ### Manual Testing
-- Test in respective Eclipse environments
-- Use sample clinical plans for each machine type
-- Verify all validators execute correctly
 
-### Planned Improvements
-- Unit tests for individual validators
-- Mock ESAPI context for testing
-- Integration tests with anonymized plan data
-- Automated regression testing
+Both clinics require manual testing in Eclipse:
+- Load test patient
+- Open plan
+- Run script from Scripts menu
+- Verify validation results
+- Check all severity levels
+
+### Test Coverage
+
+Validation areas:
+- ✅ Course and plan metadata
+- ✅ CT and patient setup
+- ✅ Dose calculation
+- ✅ Field configuration
+- ✅ Beam geometry
+- ✅ Collision detection
+- ✅ Safety checks
+- ✅ Clinical protocols
 
 ---
 
-*Multi-clinic architecture enables flexible, maintainable validation across different Eclipse versions and machine configurations*
+## Documentation References
+
+### ESAPI Documentation
+
+**Location:** `Documentation/`
+- `VMS.TPS.Common.Model.API.xml` - API classes
+- `VMS.TPS.Common.Model.Types.xml` - Types and enums
+- `Eclipse Scripting API Reference Guide 18.0.pdf`
+
+### Framework Documentation
+
+**Location:** `.claude/`
+- `SNAPSHOT.md` - Current project state
+- `BACKLOG.md` - Current sprint tasks
+- `ROADMAP.md` - Strategic direction
+- `ARCHITECTURE.md` - This file
+
+---
+
+## Key Principles
+
+1. **Clinical Safety First** - Proven versions remain unchanged
+2. **Independence** - No dependencies between clinics
+3. **Simplicity** - Each project self-contained
+4. **Manual Porting** - Explicit feature copying
+5. **Version Isolation** - Each clinic manages own version
+
+---
+
+*Architecture documentation for PlanCrossCheck independent two-clinic structure*

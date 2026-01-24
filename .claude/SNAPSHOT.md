@@ -118,14 +118,15 @@ PlanCrossCheck/
 
 ## Active Work
 
-**Current Phase: Conservative Restoration Complete**
+**Current Phase: Two-Clinic Structure Active**
 - [x] Restore ClinicE v1.8.3 to root
 - [x] Create ClinicH/ independent folder
 - [x] Backup experimental validators
 - [x] Update documentation
-- [ ] User to populate ClinicH/ with their clinical files
+- [x] User populated ClinicH/ with clinical files
 - [ ] Verify ClinicE builds successfully
-- [ ] Test ClinicE in Eclipse 18.0
+- [ ] Verify ClinicH builds successfully
+- [ ] Test both variants in their respective Eclipse versions
 
 See [BACKLOG.md](./BACKLOG.md) for detailed task list.
 
@@ -201,7 +202,10 @@ Produces: `Release/TEST_Cross_Check.esapi.dll`
 - **Machines:** TrueBeam STX (2 machines)
 - **Eclipse Version:** 16.1
 - **.NET Framework:** 4.6.1
-- **Status:** 📁 Placeholder - awaiting user files
+- **Version:** v1.0.0.1
+- **Assembly:** `PlanCrossCheck.dll`
+- **Validators:** Monolithic structure (682 lines in Validators.cs)
+- **Status:** ✅ Clinical version installed
 - **Independence:** Completely separate from ClinicE
 
 ---

@@ -48,7 +48,8 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:api.github.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(git ls-tree:*)"
     ],
     "deny": [],
     "ask": []

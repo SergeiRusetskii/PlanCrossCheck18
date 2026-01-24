@@ -64,69 +64,54 @@
     <Reference Include="System.Xml" />
     <Reference Include="VMS.TPS.Common.Model.API, Version=1.0.600.194, Culture=neutral, PublicKeyToken=305b81e210ec4b89, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Varian\RTM\18.0\esapi\API\VMS.TPS.Common.Model.API.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Varian\RTM\18.0\esapi\API\VMS.TPS.Common.Model.API.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="VMS.TPS.Common.Model.Types, Version=1.0.600.194, Culture=neutral, PublicKeyToken=305b81e210ec4b89, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Varian\RTM\18.0\esapi\API\VMS.TPS.Common.Model.Types.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Varian\RTM\18.0\esapi\API\VMS.TPS.Common.Model.Types.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <!-- Core Base classes (linked) -->
-    <Compile Include="..\..\Core\Base\ValidationSeverity.cs">
-      <Link>Core\Base\ValidationSeverity.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Core\Base\ValidationResult.cs">
-      <Link>Core\Base\ValidationResult.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Core\Base\ValidatorBase.cs">
-      <Link>Core\Base\ValidatorBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Core\Base\CompositeValidator.cs">
-      <Link>Core\Base\CompositeValidator.cs</Link>
-    </Compile>
-    <!-- Core UI classes (linked) -->
-    <Compile Include="..\..\Core\UI\MainControl.xaml.cs">
-      <Link>Core\UI\MainControl.xaml.cs</Link>
+    <Compile Include="MainControl.xaml.cs">
       <DependentUpon>MainControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="..\..\Core\UI\SeverityToColorConverter.cs">
-      <Link>Core\UI\SeverityToColorConverter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Core\UI\ValidationViewModel.cs">
-      <Link>Core\UI\ValidationViewModel.cs</Link>
-    </Compile>
-    <!-- ClinicE specific files -->
     <Compile Include="Script.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SeverityToColorConverter.cs" />
+    <Compile Include="ValidationViewModel.cs" />
+    <!-- Base validator classes -->
+    <Compile Include="Validators\Base\ValidationSeverity.cs" />
+    <Compile Include="Validators\Base\ValidationResult.cs" />
+    <Compile Include="Validators\Base\ValidatorBase.cs" />
+    <Compile Include="Validators\Base\CompositeValidator.cs" />
     <!-- Utilities -->
-    <Compile Include="Utilities\PlanUtilities.cs" />
-    <!-- Validators -->
+    <Compile Include="Validators\Utilities\PlanUtilities.cs" />
+    <!-- Root and composite validators -->
     <Compile Include="Validators\RootValidator.cs" />
     <Compile Include="Validators\CourseValidator.cs" />
     <Compile Include="Validators\PlanValidator.cs" />
+    <Compile Include="Validators\FieldsValidator.cs" />
+    <!-- Individual validators -->
     <Compile Include="Validators\CTAndPatientValidator.cs" />
     <Compile Include="Validators\UserOriginMarkerValidator.cs" />
     <Compile Include="Validators\DoseValidator.cs" />
-    <Compile Include="Validators\FieldsValidator.cs" />
     <Compile Include="Validators\FieldNamesValidator.cs" />
     <Compile Include="Validators\GeometryValidator.cs" />
     <Compile Include="Validators\SetupFieldsValidator.cs" />
-    <Compile Include="Validators\BeamEnergyValidator.cs" />
+    <Compile Include="Validators\OptimizationValidator.cs" />
     <Compile Include="Validators\ReferencePointValidator.cs" />
     <Compile Include="Validators\FixationValidator.cs" />
     <Compile Include="Validators\CollisionValidator.cs" />
-    <Compile Include="Validators\OptimizationValidator.cs" />
     <Compile Include="Validators\PlanningStructuresValidator.cs" />
-    <Compile Include="Validators\ContrastStructureValidator.cs" />
     <Compile Include="Validators\PTVBodyProximityValidator.cs" />
+    <Compile Include="Validators\BeamEnergyValidator.cs" />
+    <Compile Include="Validators\ContrastStructureValidator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="..\..\Core\UI\MainControl.xaml">
-      <Link>Core\UI\MainControl.xaml</Link>
+    <Page Include="MainControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>UserControl</SubType>
     </Page>

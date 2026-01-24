@@ -12,81 +12,135 @@ A comprehensive quality assurance tool for Varian Eclipse treatment planning sys
 
 PlanCrossCheck is an Eclipse Scripting API (ESAPI) plugin designed to systematically validate treatment plans to ensure quality and safety in radiation therapy. The tool performs extensive checks across multiple categories including plan parameters, dose calculations, beam configurations, machine-specific validations, and clinical protocols.
 
-**Architecture:** Multi-clinic variant structure supporting different Eclipse versions and machine configurations.
+**Current Version:** v1.8.3 (ClinicE - proven clinical deployment)
 
 ---
 
-## Multi-Clinic Architecture
+## Clinic Variants
 
-PlanCrossCheck uses a **variant-based architecture** to support different clinics with different Eclipse versions and machine types:
+This repository supports two independent clinic configurations:
 
-### Available Variants
+### ClinicE (Root Directory) ⭐
 
-| Variant | Eclipse Version | .NET Framework | Machine Types | Validators |
-|---------|----------------|----------------|---------------|------------|
-| **[ClinicE](Variants/ClinicE/)** | 18.0 | 4.8 | Edge, Halcyon | 18 |
-| **[ClinicH](Variants/ClinicH/)** | 16.1 | 4.6.1 | TrueBeam STX | 11 |
+**Primary production variant** - root directory files
 
-### Structure
+- **Eclipse Version:** 18.0
+- **.NET Framework:** 4.8
+- **Machine Types:** Varian Edge, Halcyon
+- **Validators:** 18 comprehensive validators
+- **Version:** v1.8.3
+- **Status:** ✅ Production - proven clinical deployment
+- **Last Updated:** Dec 20, 2024 (commit ccc4eb6)
+
+**Key Features:**
+- Full 360° collision detection
+- Edge-specific validations
+- Halcyon-specific validations
+- Optimization jaw tracking
+- Arc spacing control
+- Comprehensive safety checks
+
+### ClinicH (ClinicH/ Directory)
+
+**Independent project** - separate folder
+
+- **Eclipse Version:** 16.1
+- **.NET Framework:** 4.6.1
+- **Machine Types:** TrueBeam STX
+- **Status:** 📁 Placeholder - awaiting user files
+- **Documentation:** [ClinicH/README.md](ClinicH/README.md)
+
+**Note:** ClinicH is completely independent from ClinicE. Features can be manually copied from ClinicE validators as needed.
+
+---
+
+## Repository Structure
 
 ```
 PlanCrossCheck/
-├── Core/                    # Shared validation framework and UI
-│   ├── Base/                # Base classes (ValidatorBase, CompositeValidator)
-│   └── UI/                  # Shared WPF UI components
-│
-├── Variants/
-│   ├── ClinicE/             # Eclipse 18.0 variant (Edge & Halcyon)
-│   │   └── README.md        # ClinicE-specific documentation
-│   │
-│   └── ClinicH/             # Eclipse 16.1 variant (TrueBeam STX)
-│       └── README.md        # ClinicH-specific documentation
-│
-└── README.md                # This file
+├── .claude/                    # Shared framework (only this is shared)
+├── backup/                     # Backup of experimental validators
+│   └── ClinicH-new-validators/
+├── ClinicH/                    # Independent ClinicH project
+│   ├── README.md
+│   └── .gitkeep
+├── Documentation/              # General documentation
+├── Properties/                 # ClinicE assembly info
+├── Validators/                 # ClinicE validators (18 files)
+│   ├── Base/                   # Base classes & interfaces
+│   ├── Utilities/              # Helper utilities
+│   └── [18 validator files]
+├── MainControl.xaml            # ClinicE UI layout
+├── MainControl.xaml.cs         # ClinicE UI code-behind
+├── Script.cs                   # ClinicE entry point
+├── SeverityToColorConverter.cs # ClinicE UI converter
+├── ValidationViewModel.cs      # ClinicE view model
+├── PlanCrossCheck.csproj       # ClinicE project file
+├── PlanCrossCheck.sln          # ClinicE solution
+└── README.md                   # This file
 ```
 
-**Benefits:**
-- No code duplication for common functionality
-- Easy to add new clinic variants
-- Clinic-specific validation rules isolated
-- Independent versioning per clinic
+**Architecture Note:** This is a conservative two-clinic structure with **zero shared code** between clinics (except `.claude/` framework files). ClinicE at root is the proven clinical version. ClinicH is an independent project.
 
 ---
 
 ## Getting Started
 
-### Choose Your Variant
+### For ClinicE Users (Eclipse 18.0)
 
-1. **ClinicE** - For clinics using Eclipse 18.0 with Varian Edge or Halcyon machines
-   - [View ClinicE Documentation →](Variants/ClinicE/README.md)
+ClinicE is ready to build and deploy from the root directory.
 
-2. **ClinicH** - For clinics using Eclipse 16.1 with TrueBeam STX machines
-   - [View ClinicH Documentation →](Variants/ClinicH/README.md)
+**Requirements:**
+- Eclipse 18.0
+- .NET Framework 4.8
+- Windows x64
+- ESAPI access enabled
 
-### Quick Start
+**Build:**
+```bash
+msbuild PlanCrossCheck.csproj /p:Configuration=Release /p:Platform=x64
+```
 
-Each variant has its own:
-- Build instructions
-- Installation guide
-- Validator documentation
-- Version history
+**Output:**
+- `Release/TEST_Cross_Check.esapi.dll`
 
-See the variant-specific README for detailed information.
+**Installation:**
+1. Copy DLL to Eclipse plugin directory
+2. Restart Eclipse
+3. Access via Scripts menu
+
+### For ClinicH Users (Eclipse 16.1)
+
+See [ClinicH/README.md](ClinicH/README.md) for setup instructions.
+
+ClinicH folder is currently a placeholder. Copy your working ClinicH project files into this directory.
 
 ---
 
-## Key Features
+## Key Features (ClinicE v1.8.3)
 
-### Validation Coverage
+### Validation Categories
 
-- **Course & Plan Validation** - Course ID format, plan setup
-- **Patient & CT Validation** - User origin, CT device, markers
-- **Dose Calculation** - Grid resolution, energy consistency
-- **Field Configuration** - Naming conventions, geometry, setup fields
-- **Optimization** - Jaw tracking, arc spacing control
-- **Safety Checks** - Fixation devices, collision detection
-- **Planning Structures** - Air structures, contrast structures
-- **Clinical Metrics** - PTV-to-Body proximity
+**18 comprehensive validators:**
+
+1. **RootValidator** - Top-level plan validation orchestration
+2. **CourseValidator** - Course ID format, plan naming
+3. **CTAndPatientValidator** - User origin, CT device verification
+4. **UserOriginMarkerValidator** - User origin markers and positioning
+5. **DoseValidator** - Grid resolution, dose coverage
+6. **FieldsValidator** - Field configuration, energy consistency
+7. **BeamEnergyValidator** - Energy selection validation
+8. **FieldNamesValidator** - Field naming conventions
+9. **OptimizationValidator** - Jaw tracking, arc spacing
+10. **GeometryValidator** - Gantry, collimator, couch angles
+11. **CollisionValidator** - Full 360° collision detection
+12. **SetupFieldsValidator** - Setup field requirements
+13. **FixationValidator** - Fixation device verification
+14. **PlanningStructuresValidator** - Air structures, PRV structures
+15. **ContrastStructureValidator** - Contrast structure identification
+16. **PTVBodyProximityValidator** - PTV-to-body distance checks
+17. **PlanValidator** - Plan type, approval status
+18. **ReferencePointValidator** - Reference point validation
 
 ### User Interface
 
@@ -97,54 +151,56 @@ See the variant-specific README for detailed information.
 
 ---
 
-## Requirements
-
-### Common Requirements
-- Windows x64
-- Varian Eclipse Treatment Planning System
-- Eclipse Scripting API (ESAPI) access enabled
-- Minimum Permissions: Read access to patient plans, structure sets, and dose distributions
-
-### Variant-Specific Requirements
-
-See variant-specific README files for:
-- Eclipse version requirements
-- .NET Framework version
-- ESAPI version
-- Machine-specific requirements
-
----
-
 ## Building from Source
 
-### Build All Variants
+### ClinicE (Root)
 ```bash
-msbuild PlanCrossCheck.sln /p:Configuration=Release /p:Platform=x64
+msbuild PlanCrossCheck.csproj /p:Configuration=Release /p:Platform=x64
 ```
 
-### Build Specific Variant
-```bash
-# ClinicE only
-msbuild Variants/ClinicE/ClinicE.csproj /p:Configuration=Release /p:Platform=x64
+Produces: `Release/TEST_Cross_Check.esapi.dll`
 
-# ClinicH only
-msbuild Variants/ClinicH/ClinicH.csproj /p:Configuration=Release /p:Platform=x64
-```
+### ClinicH (Separate Project)
+See [ClinicH/README.md](ClinicH/README.md)
 
 **Note**: x64 platform is **required** - ESAPI only supports 64-bit architectures.
 
 ---
 
-## Installation
+## Installation (ClinicE)
 
-Each variant produces a separate plugin DLL:
+### Standard Installation
 
-- **ClinicE**: `Variants/ClinicE/Release/TEST_Cross_Check.esapi.dll`
-- **ClinicH**: `Variants/ClinicH/Release/PlanCrossCheck.dll`
+1. **Build the project** (see above)
+2. **Locate the DLL**: `Release/TEST_Cross_Check.esapi.dll`
+3. **Copy to Eclipse plugin directory**:
+   - Typical location: `C:\Program Files (x86)\Varian\RTM\[Version]\ExternalBeam\PlugIns\`
+4. **Restart Eclipse**
+5. **Verify installation**: Look for "Cross-check" in Scripts menu
 
-Deploy to your Eclipse plugin directory and restart Eclipse.
+### Testing Installation
 
-See variant-specific documentation for detailed deployment instructions.
+1. Open test patient in Eclipse
+2. Navigate to Scripts menu
+3. Select "Cross-check v1.8.3"
+4. Verify UI loads and validation runs
+
+---
+
+## Porting Features Between Clinics
+
+Since ClinicE and ClinicH are completely independent:
+
+**To copy a validator from ClinicE to ClinicH:**
+
+1. Review ClinicE validator implementation (root `Validators/` folder)
+2. Copy relevant validator file to your ClinicH project
+3. Adapt for Eclipse 16.1 API differences if needed
+4. Update namespace if necessary
+5. Test in Eclipse 16.1 environment
+
+**Backup validators available:**
+- `/backup/ClinicH-new-validators/` contains validators from previous multi-clinic experiment
 
 ---
 
@@ -158,6 +214,17 @@ This tool is designed to **supplement**, not replace, clinical judgment and inst
 - Document Warning-level findings in plan review
 - Customize thresholds to match institutional policies
 - Regularly update to latest version for bug fixes and enhancements
+
+---
+
+## Version History (ClinicE)
+
+**v1.8.3** (Dec 20, 2024) - Current
+- Simplified edge collision detection to full 360° check
+- Enhanced stability and performance
+- Proven clinical deployment
+
+See commit history for detailed changelog.
 
 ---
 
@@ -205,7 +272,7 @@ For reporting security vulnerabilities:
 
 Built using:
 - Varian Eclipse Scripting API (ESAPI)
-- .NET Framework
+- .NET Framework 4.8 (ClinicE)
 - Windows Presentation Foundation (WPF)
 
 ---

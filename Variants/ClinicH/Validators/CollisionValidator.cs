@@ -21,6 +21,15 @@ namespace PlanCrossCheck
     /// </summary>
     public class CollisionValidator : ValidatorBase
     {
+        // Helper class to store structure collision details
+        private class StructureCollisionInfo
+        {
+            public Structure Structure { get; set; }
+            public double MaxDistance { get; set; }
+            public VVector FurthestPoint { get; set; }
+            public double DistanceCm { get; set; }
+        }
+
         // Fixation structure prefixes used for collision assessment
         private static readonly string[] FixationStructurePrefixesForCollision = new[]
         {
@@ -85,7 +94,7 @@ namespace PlanCrossCheck
             // >36.5 cm from iso -> warning
             // >37.5 cm from iso -> error
             // Conservative approach: check full 360° coverage for maximum safety
-            var structureDetails = new List<(Structure Structure, double MaxDistance, VVector FurthestPoint, double DistanceCm)>();
+            var structureDetails = new List<StructureCollisionInfo>();
 
             foreach (var prefix in FixationStructurePrefixesForCollision)
             {
@@ -125,7 +134,13 @@ namespace PlanCrossCheck
                     if (maxRadialDistance > 0)
                     {
                         double distanceCm = maxRadialDistance / 10.0;
-                        structureDetails.Add((structure, maxRadialDistance, furthestPoint, distanceCm));
+                        structureDetails.Add(new StructureCollisionInfo
+                        {
+                            Structure = structure,
+                            MaxDistance = maxRadialDistance,
+                            FurthestPoint = furthestPoint,
+                            DistanceCm = distanceCm
+                        });
                     }
                 }
             }

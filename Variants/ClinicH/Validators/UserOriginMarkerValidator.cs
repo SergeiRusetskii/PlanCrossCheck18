@@ -41,8 +41,9 @@ namespace PlanCrossCheck
             }
 
             // Get treatment orientation
-            string orientation = context.PlanSetup?.TreatmentOrientationAsString ?? "Head First-Supine";
-            bool isSupine = orientation.Contains("Supine");
+            PatientOrientation orientation = context.PlanSetup?.TreatmentOrientation ?? PatientOrientation.HeadFirstSupine;
+            bool isSupine = orientation == PatientOrientation.HeadFirstSupine ||
+                           orientation == PatientOrientation.FeetFirstSupine;
 
             // Calculate slice index
             int sliceIndex = GetSliceIndex(userOrigin.z, image);

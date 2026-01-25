@@ -71,7 +71,11 @@ PlanCrossCheck/
 │   ├── Script.cs
 │   ├── SeverityToColorConverter.cs
 │   ├── ValidationViewModel.cs
-│   └── Validators.cs               # Monolithic validators
+│   ├── Validators/                 # 14 modular validators + 3 new
+│   │   ├── Base/
+│   │   ├── Utilities/
+│   │   └── [14 validator files]
+│   └── Validators.cs.backup        # Backup of monolithic version
 ├── Documentation/                  # ESAPI reference docs
 └── README.md                       # Project overview
 ```
@@ -79,6 +83,25 @@ PlanCrossCheck/
 ---
 
 ## Recent Progress
+
+### ClinicH Modular Refactoring (2026-01-25)
+- [x] **Refactored ClinicH to modular architecture** matching ClinicE structure
+- [x] Split 682-line Validators.cs into 19 modular files
+- [x] Created Validators/Base/ folder (4 base classes)
+- [x] Created Validators/Utilities/ folder (PlanUtilities)
+- [x] **Integrated 3 new validators from backup:**
+  - CollisionValidator: Gantry clearance validation for TrueBeam STX
+  - UserOriginMarkerValidator: Radiopaque marker detection (3 markers at user origin)
+  - OptimizationValidator: Jaw Tracking validation
+- [x] Updated PlanCrossCheck.csproj with 19 file references
+- [x] Version bumped: v1.0.0.1 → v1.1.0.0
+- [x] Original Validators.cs backed up as Validators.cs.backup
+
+**Rationale:**
+- Match ClinicE modular structure for consistency
+- Enable easier maintenance (one validator per file)
+- Add collision detection and marker validation features
+- Simplify future validator additions
 
 ### Repository Structure Finalization (2026-01-24)
 - [x] **Moved ClinicE v1.8.3 to ClinicE/ folder** for symmetry
@@ -127,16 +150,18 @@ PlanCrossCheck/
 
 ## Active Work
 
-**Current Phase: Two-Clinic Structure Complete**
+**Current Phase: ClinicH Modular Architecture Complete**
 - [x] Restore ClinicE v1.8.3 to ClinicE/ folder
 - [x] Create ClinicH/ independent folder
 - [x] Backup experimental validators
 - [x] User populated ClinicH/ with clinical files
 - [x] Update documentation and framework files
 - [x] Repository structure finalized
-- [ ] Verify ClinicE builds successfully
-- [ ] Verify ClinicH builds successfully
-- [ ] Test both variants in their respective Eclipse versions
+- [x] Refactor ClinicH to modular structure
+- [x] Integrate 3 new validators into ClinicH
+- [ ] Build ClinicH v1.1.0.0 in Eclipse 16.1
+- [ ] Test ClinicH v1.1.0.0 in Eclipse 16.1
+- [ ] Verify all 14 validators (11 original + 3 new) work correctly
 
 See [BACKLOG.md](./BACKLOG.md) for detailed task list.
 
@@ -220,10 +245,10 @@ Produces: `ClinicH/Release/PlanCrossCheck.dll`
 - **Machines:** TrueBeam STX (2 machines)
 - **Eclipse Version:** 16.1
 - **.NET Framework:** 4.6.1
-- **Version:** v1.0.0.1
+- **Version:** v1.1.0.0
 - **Assembly:** `PlanCrossCheck.dll`
-- **Validators:** Monolithic structure (682 lines in Validators.cs)
-- **Status:** ✅ Clinical version installed
+- **Validators:** Modular structure (19 files: 11 original + 3 new + 5 base/utility)
+- **Status:** ✅ Refactored to modular architecture + new features
 - **Independence:** Completely separate from ClinicE
 
 ---

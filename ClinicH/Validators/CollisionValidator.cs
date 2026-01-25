@@ -34,16 +34,14 @@ namespace PlanCrossCheck
         private static readonly string[] FixationStructurePrefixesForCollision = new[]
         {
             "BODY",
-            "z_AltaLD",
-            "z_AltaHD",
             "CouchSurface",
-            "z_ArmShuttle",
-            "z_VacBag",
-            "z_EncFrame",
-            "z_FrameHead",
-            "z_H&NFrame",
-            "z_MaskLock",
-            "z_LocBar"
+            "MP_Optek_BP",
+            "MP_WingSpan",
+            "MP_BrB_Up_BaPl",
+            "MP_BrB_Bott_BaPl",
+            "MP_Solo_BPl",
+            "MP_Enc_BPl",
+            "MP_Enc_HFr"
         };
 
         public override IEnumerable<ValidationResult> Validate(ScriptContext context)

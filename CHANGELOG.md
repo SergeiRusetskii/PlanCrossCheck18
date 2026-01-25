@@ -2,6 +2,27 @@
 
 All notable changes to PlanCrossCheck will be documented in this file.
 
+## ClinicH v1.3.3.0 - 2026-01-25
+
+### Changed
+- **Collision validation**: Updated structure prefixes for clinic's actual equipment
+  - Removed all 'z_' prefixed structures (11 removed)
+  - Added clinic-specific structures:
+    - MP_Optek_BP (baseplate)
+    - MP_WingSpan (wing board)
+    - MP_BrB_Up_BaPl (breast board upper baseplate)
+    - MP_BrB_Bott_BaPl (breast board bottom baseplate)
+    - MP_Solo_BPl (solo baseplate)
+    - MP_Enc_BPl (encompass baseplate)
+    - MP_Enc_HFr (encompass head frame)
+  - Kept: BODY and CouchSurface
+- **Assembly name**: Removed TEST_ prefix
+  - Production ready: TEST_CrossCheck.esapi → CrossCheck.esapi
+
+### Technical Details
+- CollisionValidator: 9 structure prefixes (was 11)
+- Output file: CrossCheck.esapi.dll (production name)
+
 ## ClinicH v1.3.2.0 - 2026-01-25
 
 ### Changed

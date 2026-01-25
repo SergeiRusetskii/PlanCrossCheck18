@@ -223,7 +223,10 @@ Produces: `ClinicE/Release/TEST_Cross_Check.esapi.dll`
 cd ClinicH
 msbuild PlanCrossCheck.csproj /p:Configuration=Release /p:Platform=x64
 ```
-Produces: `ClinicH/Release/PlanCrossCheck.dll`
+Produces: `ClinicH/Release/CrossCheck.esapi.dll`
+
+**Deployment:**
+Copy `CrossCheck.esapi.dll` to Eclipse script folder (typically `C:\Users\Public\Documents\Varian\Vision\16.1\ExternalBeam\Scripts\`)
 
 ---
 
@@ -245,8 +248,9 @@ Produces: `ClinicH/Release/PlanCrossCheck.dll`
 - **Machines:** TrueBeam STX (2 machines)
 - **Eclipse Version:** 16.1
 - **.NET Framework:** 4.6.1
-- **Version:** v1.1.0.0
-- **Assembly:** `PlanCrossCheck.dll`
+- **Version:** v1.3.0.0
+- **Assembly:** `CrossCheck.esapi.dll`
+- **Window Title:** "Cross-check v1.3.0"
 - **Validators:** Modular structure (19 files: 11 original + 3 new + 5 base/utility)
 - **Status:** ✅ Refactored to modular architecture + new features
 - **Independence:** Completely separate from ClinicE

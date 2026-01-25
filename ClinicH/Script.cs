@@ -26,7 +26,7 @@ namespace VMS.TPS
             };
 
             window.Content = mainControl;
-            window.Title = "Plan Cross-check";
+            window.Title = "Cross-check v1.3.0";
             window.Width = 650;
             window.Height = 1000;
         }

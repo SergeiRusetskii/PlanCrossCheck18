@@ -2,6 +2,26 @@
 
 All notable changes to PlanCrossCheck will be documented in this file.
 
+## ClinicH v1.3.0.0 - 2026-01-25
+
+### Changed
+- **Assembly Name**: Changed from `PlanCrossCheck.dll` to `CrossCheck.esapi.dll`
+  - Required for Eclipse Script module to recognize the script
+  - Must have `.esapi` extension in assembly name
+- **Window Title**: Now displays version number ("Cross-check v1.3.0")
+- **Version**: Updated to v1.3.0.0
+
+### Fixed
+- **Script Visibility**: Fixed issue where script didn't appear in Eclipse Script module
+  - Root cause: Assembly name must end with `.esapi` for Eclipse recognition
+  - Solution: Changed assembly name to `CrossCheck.esapi`
+
+### Deployment Notes
+- Build produces: `CrossCheck.esapi.dll`
+- Deploy to: `C:\Users\Public\Documents\Varian\Vision\16.1\ExternalBeam\Scripts\`
+- Script will appear in Eclipse as "CrossCheck" in Script menu
+- Window title will show "Cross-check v1.3.0"
+
 ## ClinicH v1.1.0.0 - 2026-01-25
 
 ### Added

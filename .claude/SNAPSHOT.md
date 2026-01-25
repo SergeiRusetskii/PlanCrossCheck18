@@ -248,9 +248,9 @@ Copy `TEST_CrossCheck.esapi.dll` to Eclipse script folder (typically `C:\Users\P
 - **Machines:** TrueBeam STX (2 machines)
 - **Eclipse Version:** 16.1
 - **.NET Framework:** 4.6.1
-- **Version:** v1.3.1.0
+- **Version:** v1.3.2.0
 - **Assembly:** `TEST_CrossCheck.esapi.dll`
-- **Window Title:** "Cross-check v1.3.1"
+- **Window Title:** "Cross-check v1.3.2"
 - **Validators:** Modular structure (18 files: 10 original + 3 new + 5 base/utility)
 - **Status:** ✅ Bug fixes from Eclipse testing
 - **Independence:** Completely separate from ClinicE

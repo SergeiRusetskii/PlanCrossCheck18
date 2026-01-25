@@ -10,9 +10,9 @@ namespace PlanCrossCheck
     // Utility methods for ClinicH configuration
     public static class PlanUtilities
     {
-        // Clinic has 2 TrueBeam STX machines
+        // Clinic has 2 TrueBeam machines: SN4625 and SN4664
         public static bool IsTrueBeamSTX(string machineId) =>
-            machineId?.Contains("STX") ?? false;
+            machineId == "TrueBeamSN4625" || machineId == "TrueBeamSN4664";
 
         public static bool IsArcBeam(Beam beam) =>
             beam.ControlPoints.First().GantryAngle != beam.ControlPoints.Last().GantryAngle;

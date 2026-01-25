@@ -2,6 +2,18 @@
 
 All notable changes to PlanCrossCheck will be documented in this file.
 
+## ClinicH v1.3.2.0 - 2026-01-25
+
+### Changed
+- **Collision validation**: Updated machine name check to exact names
+  - Changed from generic "STX" substring check
+  - Now checks for specific machines: 'TrueBeamSN4625' and 'TrueBeamSN4664'
+  - More precise validation for clinic's actual equipment
+
+### Technical Details
+- PlanUtilities.IsTrueBeamSTX(): Now uses exact string matching
+- Prevents false positives from generic substring matching
+
 ## ClinicH v1.3.1.0 - 2026-01-25
 
 ### Fixed

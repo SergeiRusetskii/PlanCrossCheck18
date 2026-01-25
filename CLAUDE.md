@@ -160,17 +160,22 @@ Eclipse blocks launching scripts if they are changed without a version update. F
 
 ### Auto-Version Bump Protocol
 
-**MANDATORY: ALWAYS bump version after ANY code changes or bug fixes discovered via Eclipse testing**
+**CRITICAL: Eclipse blocks launching scripts if code changes without version update**
+
+Eclipse tracks script versions and prevents execution if the code has changed but the version remains the same. This is a safety mechanism to ensure approved scripts haven't been modified.
 
 **WHEN to bump version:**
-- **ALWAYS after fixing bugs found in Eclipse testing** (increment patch version)
-- **ALWAYS after adding new features** (increment minor version)
+- **AFTER making code changes AND user will test/launch in Eclipse**
 - User provides feedback from script launch in Eclipse (runtime errors, validation issues, UI problems)
 - User reports issues from actual Eclipse execution
 - Any code changes followed by "test this in Eclipse" feedback
+- Bug fixes discovered via Eclipse testing (increment patch version: X.Y.Z → X.Y.Z+1)
+- New features added (increment minor version: X.Y.0 → X.Y+1.0)
 
 **WHEN NOT to bump version:**
-- User reports build errors (msbuild compilation errors)
+- User reports build errors (msbuild compilation errors) - these are compile-time, not runtime
+- Code changes that won't be tested in Eclipse yet
+- Documentation-only changes (README, CHANGELOG without code changes)
 - User reports syntax errors before build
 - Pure code review or refactoring without Eclipse testing
 - Documentation-only changes

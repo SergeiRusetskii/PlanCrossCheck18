@@ -52,7 +52,7 @@ namespace PlanCrossCheck
 
             if (isArc)
             {
-                var arcPattern = hasAnyFieldWithCouch ? @"^T(\d+)_G(\d+)(CW|CCW)(\d+)_(\d)$" : @"^G(\d+)(CW|CCW)(\d+)_(\d)$";
+                var arcPattern = hasAnyFieldWithCouch ? @"^T(\d+)_G(\d+)(CW|CCW)(\d+)(?:_\d)?$" : @"^G(\d+)(CW|CCW)(\d+)(?:_\d)?$";
                 var arcMatch = Regex.Match(id, arcPattern);
                 if (!arcMatch.Success) return false;
 
@@ -89,7 +89,7 @@ namespace PlanCrossCheck
             }
             else
             {
-                var staticPattern = hasAnyFieldWithCouch ? @"^T(\d+)_G(\d+)_(\d+)$" : @"^G(\d+)_(\d+)$";
+                var staticPattern = hasAnyFieldWithCouch ? @"^T(\d+)_G(\d+)(?:_\d+)?$" : @"^G(\d+)(?:_\d+)?$";
                 var staticMatch = Regex.Match(id, staticPattern);
                 if (!staticMatch.Success) return false;
 

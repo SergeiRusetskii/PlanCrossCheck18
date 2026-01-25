@@ -62,6 +62,14 @@ namespace PlanCrossCheck
             {
                 results.AddRange(ValidateTrueBeamSTXCollision(context));
             }
+            else
+            {
+                results.Add(CreateResult(
+                    "Collision",
+                    $"Collision validation skipped - not a TrueBeam STX machine (detected: {machineId ?? "unknown"})",
+                    ValidationSeverity.Info
+                ));
+            }
 
             return results;
         }

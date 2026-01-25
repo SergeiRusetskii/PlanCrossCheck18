@@ -12,7 +12,6 @@ namespace PlanCrossCheck
     {
         public PlanValidator()
         {
-            AddValidator(new CTAndPatientValidator());
             AddValidator(new DoseValidator());
             AddValidator(new FieldsValidator());
             AddValidator(new ReferencePointValidator());
@@ -31,7 +30,7 @@ namespace PlanCrossCheck
             {
                 // Treatment orientation
                 string treatmentOrientation = context.PlanSetup.TreatmentOrientation.ToString();
-                bool isHFS = treatmentOrientation.Equals("Head First-Supine", StringComparison.OrdinalIgnoreCase);
+                bool isHFS = treatmentOrientation.Equals("HeadFirstSupine", StringComparison.OrdinalIgnoreCase);
                 results.Add(CreateResult(
                     "Plan.Info",
                     $"Treatment orientation: {treatmentOrientation}" + (!isHFS ? " (non-standard orientation)" : ""),

@@ -28,13 +28,13 @@ namespace PlanCrossCheck
                 ));
 
                 // Check for required setup fields
-                bool hasCBCT = setupFields.Any(f => f.Id.ToUpperInvariant() == "CBCT");
+                bool hasSF_CBCT = setupFields.Any(f => f.Id.ToUpperInvariant() == "SF_CBCT");
                 bool hasSF0 = setupFields.Any(f => f.Id.ToUpperInvariant() == "SF_0");
                 bool hasSF270or90 = setupFields.Any(f =>
                     f.Id.ToUpperInvariant() == "SF_270" || f.Id.ToUpperInvariant() == "SF_90");
 
-                if (!hasCBCT)
-                    results.Add(CreateResult("Fields.SetupFields", "Missing required CBCT setup field", ValidationSeverity.Error));
+                if (!hasSF_CBCT)
+                    results.Add(CreateResult("Fields.SetupFields", "Missing required SF_CBCT setup field", ValidationSeverity.Error));
                 if (!hasSF0)
                     results.Add(CreateResult("Fields.SetupFields", "Missing required SF_0 setup field", ValidationSeverity.Error));
                 if (!hasSF270or90)

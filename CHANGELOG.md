@@ -2,6 +2,27 @@
 
 All notable changes to PlanCrossCheck will be documented in this file.
 
+## ClinicH v1.3.1.0 - 2026-01-25
+
+### Fixed
+- **CT.UserOrigin validation**: Removed redundant coordinate checking (CTAndPatientValidator)
+  - Now only uses UserOriginMarkerValidator for marker detection
+- **Field naming**: Made trailing postfix `_(\d)` optional
+  - Accepts both `G180` and `G180_1` formats
+  - Accepts both `G180CW270` and `G180CW270_1` for arcs
+- **Setup fields**: Changed from `CBCT` to `SF_CBCT` in all checks and messages
+- **Treatment orientation**: Fixed comparison string from "Head First-Supine" to "HeadFirstSupine"
+- **Collision validation**: Added feedback message when not TrueBeam STX machine
+  - Now shows "Collision validation skipped - not a TrueBeam STX machine (detected: {machineId})"
+  - Prevents silent failure
+
+### Removed
+- **CTAndPatientValidator.cs**: Redundant validator removed (coordinate checking not needed)
+
+### Technical Details
+- Total validators: 13 (10 original + 3 new)
+- Files: 18 validator files (down from 19)
+
 ## ClinicH v1.3.0.0 - 2026-01-25
 
 ### Changed

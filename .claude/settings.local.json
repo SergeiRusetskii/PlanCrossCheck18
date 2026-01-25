@@ -51,7 +51,8 @@
       "Bash(tree:*)",
       "Bash(git ls-tree:*)",
       "Bash(git mv MainControl.xaml MainControl.xaml.cs PlanCrossCheck.csproj PlanCrossCheck.sln Script.cs SeverityToColorConverter.cs ValidationViewModel.cs Properties Validators ClinicE/)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

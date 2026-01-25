@@ -160,7 +160,11 @@ Eclipse blocks launching scripts if they are changed without a version update. F
 
 ### Auto-Version Bump Protocol
 
+**MANDATORY: ALWAYS bump version after ANY code changes or bug fixes discovered via Eclipse testing**
+
 **WHEN to bump version:**
+- **ALWAYS after fixing bugs found in Eclipse testing** (increment patch version)
+- **ALWAYS after adding new features** (increment minor version)
 - User provides feedback from script launch in Eclipse (runtime errors, validation issues, UI problems)
 - User reports issues from actual Eclipse execution
 - Any code changes followed by "test this in Eclipse" feedback
@@ -173,18 +177,24 @@ Eclipse blocks launching scripts if they are changed without a version update. F
 
 ### Version Files to Update
 
-When bumping version, update BOTH files simultaneously:
+**CRITICAL: When bumping version, update ALL THREE locations simultaneously:**
 
 1. **Properties/AssemblyInfo.cs** (lines 32-33):
 ```csharp
-[assembly: AssemblyVersion("X.Y.Z")]
-[assembly: AssemblyFileVersion("X.Y.Z")]
+[assembly: AssemblyVersion("X.Y.Z.0")]
+[assembly: AssemblyFileVersion("X.Y.Z.0")]
 ```
 
-2. **Script.cs** (line 35):
+2. **Script.cs** (window title):
 ```csharp
-window.Title = "TEST_Cross-check vX.Y.Z";  // or "Cross-check vX.Y.Z" for production
+window.Title = "Cross-check vX.Y.Z";  // ClinicH format
+// or
+window.Title = "TEST_Cross-check vX.Y.Z";  // ClinicE format
 ```
+
+3. **Framework Files:**
+- `.claude/SNAPSHOT.md`: Update version in ClinicH/ClinicE section
+- `CHANGELOG.md`: Add new version section with changes
 
 **Version Format:** Use semantic versioning: `major.minor.patch`
 - Patch version increments for bug fixes and small changes
